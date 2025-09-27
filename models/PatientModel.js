@@ -38,7 +38,13 @@ const patientSchema = new mongoose.Schema(
       required: true,
       max: 30,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
+
   { timestamps: true }
 );
 

@@ -131,7 +131,7 @@ exports.sendVerifyCodePassword = async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"Santé MARHABA" <${process.env.EMAIL_USER}>`,
+      from: `"Clinique Médicale Keneya" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Code de réinitialisation',
       text: `Votre code de réinitialisation est : ${code}. Il expire dans 2 minutes.`,
@@ -168,5 +168,88 @@ exports.resetPassword = async (req, res) => {
     res
       .status(500)
       .json({ message: 'Erreur de changement veuillez réessayez.' });
+  }
+};
+
+// Get All Users
+exports.getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find().select('-password'); // Exclure le mot de passe
+    res.status(200).json(users);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+// Get One User
+
+exports.getOneUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const user = await User.findById(userId).select('-password'); // Exclure le mot de passe
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur introuvable.' });
+    }
+    res.status(200).json(user);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+// Update User
+exports.updateUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { name, email, role, boutique } = req.body;
+    const lowerName = name.toLowerCase();
+    const existingUser = await User.findOne({
+      email,
+      name: lowerName,
+      _id: { $ne: userId },
+    });
+    if (existingUser) {
+      return res
+        .status(400)
+        .json({ message: 'Un utilisateur avec cet email existe déjà.' });
+    }
+
+    const user = await User.findByIdAndUpdate(
+      userId,
+      {
+        name: lowerName,
+        email,
+        role,
+      },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ message: 'Utilisateur introuvable.' });
+    }
+
+    res.status(200).json({ message: 'Utilisateur mis à jour avec succès.' });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Erreur serveur.' });
+  }
+};
+
+exports.authMiddleware = (req, res, next) => {
+  const token = req.header('Authorization')?.replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).json({ message: 'Accès refusé, token manquant.' });
+  }
+
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET ||
+        'ZER45TYUIOPQSDbcdefghijklmnsopqrstuvwxyzFG4567H'
+    );
+    req.user = decoded; // { id, name, email, role }
+    next();
+  } catch (error) {
+    res.status(401).json({ message: 'Token invalide.' });
   }
 };

@@ -13,6 +13,7 @@ exports.addTraitement = async (req, res) => {
       result,
       observation,
       totalAmount,
+
       ...resOfData
     } = req.body;
 
@@ -24,6 +25,7 @@ exports.addTraitement = async (req, res) => {
       result: motif.toLowerCase(),
       observation: observation.toLowerCase(),
       totalAmount: formattedTotalAmount,
+      user: req.user.id,
       ...resOfData,
     });
     return res.status(201).json({ Traitements });
@@ -75,6 +77,7 @@ exports.getAllTraitements = async (req, res) => {
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 })
       .populate('patient')
+      .populate('user')
       .populate('doctor');
     return res.status(200).json(traitements);
   } catch (err) {

@@ -17,8 +17,8 @@ exports.createDoctor = async (req, res) => {
     if (
       !textValidation.stringValidator(lowerFirstName) ||
       !textValidation.stringValidator(lowerLastName) ||
-      !textValidation.stringValidator(lowerAdresse) ||
-      !textValidation.emailValidation(emailAdresse)
+      (emailAdresse != '' && !textValidation.stringValidator(lowerAdresse)) ||
+      (adresse != '' && !textValidation.emailValidation(emailAdresse))
     ) {
       return res.status(400).json({
         status: 'error',
@@ -58,6 +58,7 @@ exports.createDoctor = async (req, res) => {
       lastName: lowerLastName,
       emailAdresse: lowerEmail,
       adresse: lowerAdresse,
+      user: req.user.id,
       ...resOfData,
     });
     return res.status(201).json({
@@ -76,6 +77,7 @@ exports.createDoctor = async (req, res) => {
 exports.getAllDoctors = async (req, res) => {
   try {
     const doctors = await Doctor.find()
+      .populate('user')
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 });
     return res.status(200).json(doctors);

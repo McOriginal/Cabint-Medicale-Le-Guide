@@ -9,13 +9,6 @@ const ordonanceSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Clé rélation Doctor
-    // doctor: {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Doctor',
-    //   required: true,
-    // },
-
     items: [
       {
         medicaments: {
@@ -39,6 +32,11 @@ const ordonanceSchema = new mongoose.Schema(
       type: Number,
       required: [true, "Le total de l'ordonnance est requis"],
       min: [0, 'Le total doit être positif'],
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
   },
 

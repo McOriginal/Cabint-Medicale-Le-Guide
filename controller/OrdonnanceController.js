@@ -65,9 +65,12 @@ exports.createOrdonnance = async (req, res) => {
     }
 
     // Création de l’ordonnance
-    const newOrdonnance = await Ordonnance.create([{ items, ...restOfData }], {
-      session,
-    });
+    const newOrdonnance = await Ordonnance.create(
+      [{ items, user: req.user.id, ...restOfData }],
+      {
+        session,
+      }
+    );
 
     // Validation de la transaction
     await session.commitTransaction();
@@ -158,14 +161,15 @@ exports.getAllOrdonnances = async (req, res) => {
   try {
     const ordonnances = await Ordonnance.find()
       // Trie par date de création, du plus récent au plus ancien
-      .sort({ createdAt: -1 })
       .populate({
         path: 'traitement',
         populate: {
           path: 'patient',
         },
       })
-      .populate('items.medicaments');
+      .populate('items.medicaments')
+      .populate('user')
+      .sort({ createdAt: -1 });
     return res.status(201).json(ordonnances);
   } catch (e) {
     return res.status(404).json(e);
@@ -174,9 +178,9 @@ exports.getAllOrdonnances = async (req, res) => {
 
 exports.getOneOrdonnance = async (req, res) => {
   try {
-    const ordonnance = await Ordonnance.findById(req.params.id).populate(
-      'items.medicaments'
-    );
+    const ordonnance = await Ordonnance.findById(req.params.id)
+      .populate('user')
+      .populate('items.medicaments');
 
     // ID de Traitement
     const traitementId = ordonnance.traitement._id;

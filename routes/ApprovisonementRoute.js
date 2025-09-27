@@ -1,10 +1,13 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/UserController');
+
 const approvisonementController = require('../controller/ApprovisonementContoller');
 
 // Route pour créer un approvisionnement
 router.post(
-  '/createApprovisonement', // ID du médicament
+  '/createApprovisonement',
+  userController.authMiddleware,
   approvisonementController.createApprovisonement
 );
 

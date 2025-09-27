@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/UserController');
+
 const ordonnanceController = require('../controller/OrdonnanceController');
 
 //  Créer une nouvelle Ordonnance
-router.post('/createOrdonnance', ordonnanceController.createOrdonnance);
+router.post(
+  '/createOrdonnance',
+  userController.authMiddleware,
+  ordonnanceController.createOrdonnance
+);
 
 // Mettre à jour l'ordonnance
 router.put('/updateOrdonnance/:id', ordonnanceController.updateOrdonnance);
@@ -12,7 +18,7 @@ router.put('/updateOrdonnance/:id', ordonnanceController.updateOrdonnance);
 router.get('/getAllOrdonnances', ordonnanceController.getAllOrdonnances);
 
 //  Obtenir une Ordonnances
-router.get('/getOneOrdonnance/:id', ordonnanceController.getOneOrdonnance);
+router.get('/details/:id', ordonnanceController.getOneOrdonnance);
 
 //  Obtenir une Ordonnances (avec TRAITEMENT liée)
 router.get(

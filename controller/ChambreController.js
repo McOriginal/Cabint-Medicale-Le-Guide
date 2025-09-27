@@ -37,6 +37,7 @@ exports.createChambre = async (req, res) => {
       title: lowerTitle,
       description: lowerDescription,
       bedNumber: numberChambre,
+      user: req.user.id,
     });
     return res.status(201).json(chambre);
   } catch (err) {
@@ -48,6 +49,7 @@ exports.createChambre = async (req, res) => {
 exports.getAllChambre = async (req, res) => {
   try {
     const chambres = await Chambre.find()
+      .populate('user')
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 });
     return res.status(200).json(chambres);

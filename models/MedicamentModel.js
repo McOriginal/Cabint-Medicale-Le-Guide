@@ -10,6 +10,7 @@ const medicamentSchema = new mongoose.Schema(
     stock: {
       type: Number,
       required: true,
+      defaul: 0,
       trim: true,
     },
     price: {
@@ -17,9 +18,20 @@ const medicamentSchema = new mongoose.Schema(
       required: true,
       trim: true,
     },
+    achatPrice: {
+      type: Number,
+      required: true,
+      defaul: 0,
+      trim: true,
+    },
 
     imageUrl: {
       type: String,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
   },
   { timestamps: true }

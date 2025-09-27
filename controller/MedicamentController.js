@@ -28,6 +28,7 @@ exports.createMedicament = async (req, res) => {
       name: lowerName,
       stock: formatStock,
       price: formatPrice,
+      user: req.user.id,
       ...resOfData,
     });
 
@@ -84,6 +85,7 @@ exports.updateMedicament = async (req, res) => {
 exports.getAllMedicamentWithStock = async (req, res) => {
   try {
     const medicaments = await Medicament.find({ stock: { $gt: 1 } })
+      .populate('user')
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 });
 
@@ -96,7 +98,7 @@ exports.getAllMedicamentWithStock = async (req, res) => {
 //  Afficher une seule Medicament avec une stock terminée (0)
 exports.getAllMedicamentWithStockFinish = async (req, res) => {
   try {
-    const medicaments = await Medicament.find({ stock: { $lt: 5 } })
+    const medicaments = await Medicament.find({ stock: { $lt: 10 } })
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 });
 

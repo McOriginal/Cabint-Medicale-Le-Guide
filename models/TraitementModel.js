@@ -65,6 +65,11 @@ const traitementSchema = new mongoose.Schema(
       ref: 'Doctor',
       required: true,
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   { timestamps: true }
 );

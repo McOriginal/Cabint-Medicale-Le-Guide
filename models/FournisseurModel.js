@@ -10,12 +10,6 @@ const fournisseurSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    gender: {
-      type: String,
-      required: true,
-      enum: ['Masculin', 'Féminin'],
-      default: 'Masculin',
-    },
 
     phoneNumber: {
       type: Number,
@@ -33,8 +27,9 @@ const fournisseurSchema = new mongoose.Schema(
       required: true,
       max: 30,
     },
-    marchandise: {
-      type: String,
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
       required: true,
     },
   },

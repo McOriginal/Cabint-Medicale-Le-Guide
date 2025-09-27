@@ -27,10 +27,7 @@ const doctorSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    dateOfBirth: {
-      type: Date,
-      trim: true,
-    },
+
     speciality: {
       type: String,
       trim: true,
@@ -42,15 +39,17 @@ const doctorSchema = new mongoose.Schema(
       unique: true,
       trim: true,
     },
-    salaire: {
-      type: Number,
-    },
 
     guardDays: {
       type: String,
     },
     statut: {
       type: String,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
     },
   },
   { timestamps: true }

@@ -13,7 +13,10 @@ exports.createPaiement = async (req, res) => {
       return res.status(404).json({ message: 'Ce Traitement est déjà payé' });
     }
 
-    const paiement = await Paiement.create(req.body);
+    const paiement = await Paiement.create({
+      user: req.user.id,
+      ...req.body,
+    });
     res.status(201).json(paiement);
   } catch (err) {
     res.status(400).json({ status: 'error', message: err.message });
@@ -48,14 +51,15 @@ exports.getAllPaiements = async (req, res) => {
   try {
     const paiements = await Paiement.find()
       // Trie par date de création, du plus récent au plus ancien
-      .sort({ createdAt: -1 })
       .populate({
         path: 'traitement',
         populate: {
           path: 'patient',
         },
       })
-      .populate('ordonnance');
+      .populate('ordonnance')
+      .populate('user')
+      .sort({ createdAt: -1 });
     return res.status(200).json(paiements);
   } catch (err) {
     res.status(400).json({ status: 'error', message: err.message });

@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/UserController');
+
 const doctorController = require('../controller/DoctorController');
 
 // Créer
-router.post('/createDoctor', doctorController.createDoctor);
+router.post(
+  '/createDoctor',
+  userController.authMiddleware,
+  doctorController.createDoctor
+);
 
 // Lire
 router.get('/allDoctors', doctorController.getAllDoctors);

@@ -19,9 +19,11 @@ const materielSchema = new mongoose.Schema(
     imageUrl: {
       type: String,
     },
-
-    // Clé de rélation de Chambre
-    chambre: { type: mongoose.Schema.Types.ObjectId, ref: 'Chambre' },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   { timestamps: true }
 );

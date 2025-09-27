@@ -38,22 +38,23 @@ exports.createApprovisonement = async (req, res) => {
           quantity: formatQuantity,
           price: formatPrice,
           medicament,
+          user: req.user.id,
         },
       ],
       { session }
     );
 
     // 3️ Création de la dépense associée
-    await Depense.create(
-      [
-        {
-          totalAmount: formatPrice,
-          motifDepense: `Approvisionnement de (${quantity}) ${medica.name}`,
-          dateOfDepense: approvisonement[0].deliveryDate,
-        },
-      ],
-      { session }
-    );
+    // await Depense.create(
+    //   [
+    //     {
+    //       totalAmount: formatPrice,
+    //       motifDepense: `Approvisionnement de (${quantity}) ${medica.name}`,
+    //       dateOfDepense: approvisonement[0].deliveryDate,
+    //     },
+    //   ],
+    //   { session }
+    // );
 
     //  Si tout est OK, on valide la transaction
     await session.commitTransaction();
@@ -74,7 +75,8 @@ exports.getAllApprovisonements = async (req, res) => {
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 })
       .populate('medicament')
-      .populate('fournisseur');
+      .populate('fournisseur')
+      .populate('user');
     return res.status(200).json(approvisonements);
   } catch (error) {
     res.status(400).json({ message: error.message });

@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/UserController');
+
 const materielController = require('../controller/MaterielController');
 
 //  Créer une nouvelle Materiel
-router.post('/createMateriel', materielController.createMateriel);
+router.post(
+  '/createMateriel',
+  userController.authMiddleware,
+  materielController.createMateriel
+);
 
 //  Obtenir toutes les Materiels (avec année scolaire liée)
 router.get('/getMateriels', materielController.getMateriels);

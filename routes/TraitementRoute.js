@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/UserController');
+
 const traitementController = require('../controller/TraitementController');
 
 // Ajouter un Traitements
-router.post('/addTraitement', traitementController.addTraitement);
+router.post(
+  '/addTraitement',
+  userController.authMiddleware,
+  traitementController.addTraitement
+);
 
 // Récupérer toutes les Traitements
 router.get('/getAllTraitements', traitementController.getAllTraitements);

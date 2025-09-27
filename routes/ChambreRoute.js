@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/UserController');
+
 const chambreController = require('../controller/ChambreController');
 
 //  Créer une nouvelle Chambre
-router.post('/createChambre', chambreController.createChambre);
+router.post(
+  '/createChambre',
+  userController.authMiddleware,
+  chambreController.createChambre
+);
 
 //  Obtenir toutes les Chambres (avec année scolaire liée)
 router.get('/getChambres', chambreController.getAllChambre);

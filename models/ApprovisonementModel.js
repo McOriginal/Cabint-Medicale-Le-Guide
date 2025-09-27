@@ -23,6 +23,11 @@ const approvisonementSchema = new mongoose.Schema(
       ref: 'Fournisseur',
       required: true, // Référence au fournisseur
     },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   { timestamps: true }
 );

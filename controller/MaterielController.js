@@ -28,6 +28,7 @@ exports.createMateriel = async (req, res) => {
       name: lowerName,
       description: lowerDescription,
       nombre: numberMateriel,
+      user: req.user.id,
       ...resData,
     });
     return res.status(201).json(materiel);
@@ -40,6 +41,7 @@ exports.createMateriel = async (req, res) => {
 exports.getMateriels = async (req, res) => {
   try {
     const materiels = await Materiel.find()
+      .populate('user')
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 });
     return res.status(200).json(materiels);

@@ -5,20 +5,13 @@ const textValidation = require('./regexValidation');
 // Créer un Fournisseur
 exports.createFournisseur = async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      emailAdresse,
-      marchandise,
-      adresse,
-      ...resOfData
-    } = req.body;
+    const { firstName, lastName, emailAdresse, adresse, ...resOfData } =
+      req.body;
     // Changer les données en miniscule
     const lowerFirstName = firstName.toLowerCase();
     const lowerLastName = lastName.toLowerCase();
     const lowerAdresse = adresse.toLowerCase();
     const lowerEmail = emailAdresse.toLowerCase();
-    const lowerMarchandise = marchandise.toLowerCase();
 
     const phoneNumber = Number(req.body.phoneNumber);
 
@@ -26,8 +19,7 @@ exports.createFournisseur = async (req, res) => {
       !textValidation.stringValidator(lowerFirstName) ||
       !textValidation.stringValidator(lowerLastName) ||
       !textValidation.stringValidator(lowerAdresse) ||
-      (emailAdresse != '' && !textValidation.emailValidation(emailAdresse)) ||
-      !textValidation.stringValidator(marchandise)
+      (emailAdresse != '' && !textValidation.emailValidation(emailAdresse))
     ) {
       return res.status(400).json({
         status: 'error',
@@ -67,7 +59,7 @@ exports.createFournisseur = async (req, res) => {
       lastName: lowerLastName,
       emailAdresse: lowerEmail,
       adresse: lowerAdresse,
-      marchandise: lowerMarchandise,
+      user: req.user.id,
       ...resOfData,
     });
     return res.status(201).json(newFournisseur);
@@ -84,6 +76,7 @@ exports.createFournisseur = async (req, res) => {
 exports.getAllFournisseurs = async (req, res) => {
   try {
     const fournisseurs = await Fournisseur.find()
+      .populate('user')
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 });
     return res.status(200).json(fournisseurs);
@@ -114,7 +107,6 @@ exports.updateFournisseur = async (req, res) => {
     lastName,
     emailAdresse,
     adresse,
-    marchandise,
     phoneNumber,
     ...resOfData
   } = req.body;
@@ -123,14 +115,12 @@ exports.updateFournisseur = async (req, res) => {
   const lowerLastName = lastName.toLowerCase();
   const lowerAdresse = adresse.toLowerCase();
   const lowerEmail = emailAdresse.toLowerCase();
-  const lowerMarchandise = marchandise.toLowerCase();
 
   if (
     !textValidation.stringValidator(lowerFirstName) ||
     !textValidation.stringValidator(lowerLastName) ||
     !textValidation.stringValidator(lowerAdresse) ||
-    !textValidation.emailValidation(emailAdresse) ||
-    !textValidation.stringValidator(marchandise)
+    !textValidation.emailValidation(emailAdresse)
   ) {
     return res.status(400).json({
       status: 'error',

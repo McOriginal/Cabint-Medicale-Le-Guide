@@ -1,10 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/UserController');
 
 const patientController = require('../controller/PatientController');
 
 // Route vers la création d'un nouvel étudiant
-router.post('/newPatient', patientController.newPatient);
+router.post(
+  '/newPatient',
+  userController.authMiddleware,
+  patientController.newPatient
+);
 
 // Route pour afficher tous les étudiants
 router.get('/allPatients', patientController.getAllPatients);

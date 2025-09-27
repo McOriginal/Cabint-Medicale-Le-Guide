@@ -1,9 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const userController = require('../controller/UserController');
+
 const medicamentController = require('../controller/MedicamentController');
 
 // Créer un Medicament
-router.post('/addMedicament', medicamentController.createMedicament);
+router.post(
+  '/addMedicament',
+  userController.authMiddleware,
+  medicamentController.createMedicament
+);
 
 // Afficher une toutes les Medicament
 router.get(

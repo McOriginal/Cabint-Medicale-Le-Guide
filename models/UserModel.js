@@ -24,6 +24,11 @@ const UserSchema = new mongoose.Schema(
       type: String,
       enum: ['admin', 'medecin', 'secretaire'],
     },
+    // user: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'User',
+    //   required: true,
+    // },
   },
   {
     timestamps: true,

@@ -22,6 +22,7 @@ exports.createDepense = async (req, res) => {
       totalAmount: formattedTotalAmount,
       motifDepense: formattedMotifDepense,
       dateOfDepense: dateOfDepense,
+      user: req.user.id,
     });
     return res.status(201).json(depense);
   } catch (error) {
@@ -74,7 +75,9 @@ exports.updateDepense = async (req, res) => {
 // Get all expenses
 exports.getAllDepenses = async (req, res) => {
   try {
-    const depenses = await Depense.find().sort({ dateOfDepense: -1 });
+    const depenses = await Depense.find()
+      .populate('user')
+      .sort({ dateOfDepense: -1 });
     return res.status(200).json(depenses);
   } catch (error) {
     return res.status(500).json({ message: error.message });

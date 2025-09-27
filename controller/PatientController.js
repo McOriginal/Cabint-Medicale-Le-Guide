@@ -69,6 +69,7 @@ exports.newPatient = async (req, res) => {
       adresse: lowerAdresse,
       ethnie: lowerEthnie,
       profession: lowerProfession,
+      user: req.user.id,
       ...resOfData,
     });
     return res.status(201).json({
@@ -91,6 +92,7 @@ exports.newPatient = async (req, res) => {
 exports.getAllPatients = async (req, res) => {
   try {
     const allPatients = await Patient.find()
+      .populate('user')
       // Trie par date de création, du plus récent au plus ancien
       .sort({ createdAt: -1 });
 
@@ -108,7 +110,9 @@ exports.getAllPatients = async (req, res) => {
 
 exports.getOnePatient = async (req, res) => {
   try {
-    const onePatient = await Patient.findById(req.params.patientId);
+    const onePatient = await Patient.findById(req.params.patientId).populate(
+      'user'
+    );
 
     res.status(200).json({
       status: 'succes',

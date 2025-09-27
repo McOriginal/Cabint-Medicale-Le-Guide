@@ -16,6 +16,7 @@ exports.createAppointment = async (req, res) => {
     const appointment = await Appointment.create({
       ...restOfData,
       reasonForVisit: lowerReasonForVisit,
+      user: req.user.id,
     });
     return res.status(201).json(appointment);
   } catch (error) {
@@ -38,7 +39,8 @@ exports.getAllAppointments = async (req, res) => {
           path: 'patient',
         },
       })
-      .populate('doctor');
+      .populate('doctor')
+      .populate('user');
     return res.status(200).json(appointments);
   } catch (error) {
     return res.status(400).json({

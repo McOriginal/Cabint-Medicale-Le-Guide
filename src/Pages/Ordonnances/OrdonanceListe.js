@@ -302,10 +302,9 @@ export default function OrdonnanceListe() {
                                                 data-bs-toggle='modal'
                                                 data-bs-target='#showdetails'
                                                 onClick={() => {
-                                                  setSelectedOrdonnanceID(
-                                                    ordo?._id
+                                                  navigate(
+                                                    `/ordonnance/details/${ordo?._id}`
                                                   );
-                                                  tog_show_modal();
                                                 }}
                                               >
                                                 <i className=' bx bx-show-alt text-white'></i>

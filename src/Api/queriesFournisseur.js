@@ -4,9 +4,15 @@ import api from './api';
 // Ajouter une Fournisseur
 export const useCreateFournisseur = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
 
   return useMutation({
-    mutationFn: (data) => api.post('/fournisseurs/createFournisseur', data),
+    mutationFn: (data) =>
+      api.post('/fournisseurs/createFournisseur', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['fournisseurs']),
   });
 };

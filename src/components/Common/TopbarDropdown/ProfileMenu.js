@@ -12,6 +12,7 @@ import {
 
 import { AuthContext } from '../../../Auth/AuthContext';
 import { connectedUserName } from '../../../Pages/Authentication/userInfos';
+import { Link } from 'react-router-dom';
 
 const ProfileMenu = () => {
   // Declare a new state variable, which we'll call "menu"
@@ -38,10 +39,12 @@ const ProfileMenu = () => {
           <i className='mdi mdi-chevron-down d-xl-inline-block' />
         </DropdownToggle>
         <DropdownMenu className='dropdown-menu-end'>
-          <DropdownItem tag='a' href='/userprofile'>
+          <DropdownItem>
             {' '}
-            <i className='ri-user-line align-middle me-2' />
-            Profile
+            <Link to='/userprofile'>
+              <i className='ri-user-line align-middle me-2' />
+              Profile
+            </Link>
           </DropdownItem>
 
           <div className='dropdown-divider' />

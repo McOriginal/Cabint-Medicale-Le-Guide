@@ -6,9 +6,10 @@ import LoadingSpiner from '../components/LoadingSpiner';
 import BackButton from '../components/BackButton';
 import FormModal from '../components/FormModal';
 import UpdateUserProfile from './UpdateUserProfile';
+import { hospitalName } from '../CompanyInfo/CompanyInfo';
 
 export default function UsersProfilesListe() {
-  document.title = 'Liste des Profiles';
+  document.title = `Liste des Utilisateur | ${hospitalName}`;
   const {
     data: userProfileData,
     isLoading: loadingProfile,

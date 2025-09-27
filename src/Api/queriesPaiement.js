@@ -4,8 +4,15 @@ import api from './api';
 // Créer une nouvelle Paiement
 export const useCreatePaiement = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
-    mutationFn: (data) => api.post('/paiements/createPaiement', data),
+    mutationFn: (data) =>
+      api.post('/paiements/createPaiement', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['paiements']),
   });
 };

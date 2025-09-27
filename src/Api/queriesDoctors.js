@@ -4,8 +4,15 @@ import api from './api';
 // Créer une nouvelle Filière
 export const useCreateDoctor = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
-    mutationFn: (data) => api.post('/doctors/createDoctor', data),
+    mutationFn: (data) =>
+      api.post('/doctors/createDoctor', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['Doctor']),
   });
 };

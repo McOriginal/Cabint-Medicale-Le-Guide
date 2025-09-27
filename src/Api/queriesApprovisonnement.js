@@ -4,9 +4,15 @@ import api from './api';
 // Créer une nouvelle approvisonnements
 export const useCreateApprovisonnement = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
     mutationFn: (data) =>
-      api.post('/approvisonnements/createApprovisonement', data),
+      api.post('/approvisonnements/createApprovisonement', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['approvisonnements']),
   });
 };

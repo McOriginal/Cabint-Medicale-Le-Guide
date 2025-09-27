@@ -27,14 +27,12 @@ export default function UpdateUserProfile({ selectedUser, tog_form_modal }) {
     initialValues: {
       email: selectedUser?.email || '',
       name: selectedUser?.name || '',
-      boutique: selectedUser.boutique || undefined,
       role: selectedUser?.role || '',
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Veuillez Entrer Votre Nom'),
       role: Yup.string().required('Veuillez Sélectionner un Rôle'),
       email: Yup.string().required('Veuillez Enterz une Adresse Email'),
-      boutique: Yup.number(),
     }),
     onSubmit: (values) => {
       setIsLoading(true);

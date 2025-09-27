@@ -4,8 +4,15 @@ import api from './api';
 // Créer un étudiant
 export const useCreateTraitement = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
-    mutationFn: (data) => api.post('/traitements/addTraitement', data),
+    mutationFn: (data) =>
+      api.post('/traitements/addTraitement', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['traitement']),
   });
 };

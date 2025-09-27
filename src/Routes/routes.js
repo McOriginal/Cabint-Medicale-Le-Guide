@@ -44,6 +44,8 @@ import UpdatePassword from '../Pages/Authentication/UpdatePassword.js';
 import VerifyCode from '../Pages/Authentication/VerifyCode.js';
 import ResetPassword from '../Pages/Authentication/ResetPassword.js';
 import UpdateOrdonance from '../Pages/Ordonnances/UpdateOrdonance.js';
+import UsersProfilesListe from '../Pages/Authentication/UsersProfilesListe.js';
+import OrdonnanceDetails from '../Pages/Ordonnances/OrdonnanceDetails.js';
 
 const sharedRoutes = [
   //appointments
@@ -85,6 +87,9 @@ const authProtectedRoutes = [
   // Ordonnance
   { path: '/ordonnances', component: <OrdonnanceListe /> },
 
+  // Ordonnance
+  { path: '/ordonnances/details/:id', component: <OrdonnanceDetails /> },
+
   // Update Ordonnance
   { path: '/traitements/updateOrdonnance/:id', component: <UpdateOrdonance /> },
 
@@ -110,6 +115,9 @@ const authProtectedRoutes = [
 
   // Profile
   { path: '/userprofile', component: <UserProfile /> },
+
+  // Profile
+  { path: '/profileListe', component: <UsersProfilesListe /> },
 
   // Outils Médicals
 

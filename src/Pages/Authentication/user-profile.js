@@ -18,10 +18,11 @@ import {
 } from './userInfos';
 import { AuthContext } from '../../Auth/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import { hospitalName } from '../CompanyInfo/CompanyInfo';
 // actions
 
 const UserProfile = () => {
-  document.title = 'Profile | MARHABA Santé';
+  document.title = `Profile | ${hospitalName}`;
 
   const navigate = useNavigate();
 
@@ -57,20 +58,28 @@ const UserProfile = () => {
                     </div>
                     <div className='text-center'>
                       <div className='text-muted'>
-                        <h5>Dr. {connectedUserName}</h5>
+                        <h5> {connectedUserName}</h5>
                         <p className='mb-1'>{connectedUserEmail}</p>
                       </div>
                     </div>
 
-                    <div className='mt-4 d-flex flex-column gap-4'>
+                    <div className='mt-4 d-flex flex-wrap gap-4 justify-content-center align-items-center'>
                       {/* Bouton Créer un nouveau Compte */}
                       {connectedUserRole === 'admin' && (
-                        <Button
-                          color='secondary'
-                          onClick={() => navigate('/register')}
-                        >
-                          Créer un Compte
-                        </Button>
+                        <div className='mt-4 d-flex flex-wrap gap-4  justify-content-center align-items-center'>
+                          <Button
+                            color='secondary'
+                            onClick={() => navigate('/register')}
+                          >
+                            Créer un Compte
+                          </Button>
+                          <Button
+                            color='secondary'
+                            onClick={() => navigate('/profileListe')}
+                          >
+                            Liste des Utilisateurs
+                          </Button>
+                        </div>
                       )}
                       {/* FIN de Bouton Créer un nouveau Compte */}
 

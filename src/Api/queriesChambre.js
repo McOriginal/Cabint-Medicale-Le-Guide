@@ -4,8 +4,15 @@ import api from './api';
 // Créer une nouvelle Chambre
 export const useCreateChambre = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
-    mutationFn: (data) => api.post('/chambres/createChambre', data),
+    mutationFn: (data) =>
+      api.post('/chambres/createChambre', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['chambres']),
   });
 };

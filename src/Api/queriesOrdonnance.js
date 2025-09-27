@@ -4,8 +4,15 @@ import api from './api';
 // Créer une nouvelle Ordonnance
 export const useCreateOrdonnance = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
-    mutationFn: (data) => api.post('/ordonnances/createOrdonnance', data),
+    mutationFn: (data) =>
+      api.post('/ordonnances/createOrdonnance', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['ordonnances']),
   });
 };
@@ -32,7 +39,7 @@ export const useOneOrdonnance = (id) =>
   useQuery({
     queryKey: ['ordonnances', id],
     queryFn: () =>
-      api.get(`/ordonnances/getOneOrdonnance/${id}`).then((res) => res.data),
+      api.get(`/ordonnances/details/${id}`).then((res) => res.data),
     enabled: Boolean(id),
     staleTime: 1000 * 60 * 5, //chaque 5 minutes rafraichir les données
   });

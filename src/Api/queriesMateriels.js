@@ -4,8 +4,15 @@ import api from './api';
 // Créer une nouvelle Materiel
 export const useCreateMateriel = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
-    mutationFn: (data) => api.post('/materiels/createMateriel', data),
+    mutationFn: (data) =>
+      api.post('/materiels/createMateriel', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['materiels']),
   });
 };

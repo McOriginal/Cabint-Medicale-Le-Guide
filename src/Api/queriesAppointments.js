@@ -4,8 +4,14 @@ import api from './api';
 // Créer une nouvelle appointments
 export const useCreateAppointment = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
   return useMutation({
-    mutationFn: (data) => api.post('/appointments/createAppointment', data),
+    mutationFn: (data) =>
+      api.post('/appointments/createAppointment', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['appointments']),
   });
 };

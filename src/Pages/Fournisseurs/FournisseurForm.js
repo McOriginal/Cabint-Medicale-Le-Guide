@@ -37,11 +37,9 @@ const FournisseurForm = ({ fournisseurToEdit, tog_form_modal }) => {
     initialValues: {
       firstName: fournisseurToEdit?.firstName || '',
       lastName: fournisseurToEdit?.lastName || '',
-      gender: fournisseurToEdit?.gender || '',
       phoneNumber: fournisseurToEdit?.phoneNumber || undefined,
       adresse: fournisseurToEdit?.adresse || '',
       emailAdresse: fournisseurToEdit?.emailAdresse || '',
-      marchandise: fournisseurToEdit?.marchandise || '',
     },
     validationSchema: Yup.object({
       firstName: Yup.string()
@@ -51,16 +49,12 @@ const FournisseurForm = ({ fournisseurToEdit, tog_form_modal }) => {
       lastName: Yup.string()
         .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/, 'Veillez Entrez une valeur correct !')
         .required('Ce champ Prénom est obligatoire'),
-      gender: Yup.string().required('Ce champ est obligatoire'),
       phoneNumber: Yup.number().required('Ce champ est obligatoire'),
       emailAdresse: Yup.string().matches(
         /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
         'Veillez Entrez un Email correct !'
       ),
       adresse: Yup.string()
-        .matches(/^[a-z0-9À-ÿ\s]+$/i, 'Veillez Entrez une valeur correct !')
-        .required('Ce champ est obligatoire'),
-      marchandise: Yup.string()
         .matches(/^[a-z0-9À-ÿ\s]+$/i, 'Veillez Entrez une valeur correct !')
         .required('Ce champ est obligatoire'),
     }),
@@ -179,30 +173,25 @@ const FournisseurForm = ({ fournisseurToEdit, tog_form_modal }) => {
       <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='gender'>Genre</Label>
-
+            <Label htmlFor='phoneNumber'>Téléphone</Label>
             <Input
-              name='gender'
-              placeholder='Sélectionner le Genre...'
-              type='select'
+              name='phoneNumber'
+              placeholder='70 00 00 00'
+              type='number'
               className='form-control'
-              id='gender'
+              id='phoneNumber'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.gender || ''}
+              value={validation.values.phoneNumber || ''}
               invalid={
-                validation.touched.gender && validation.errors.gender
+                validation.touched.phoneNumber && validation.errors.phoneNumber
                   ? true
                   : false
               }
-            >
-              <option value=''>Sélectionner le genre</option>
-              <option value='Masculin'>Masculin</option>
-              <option value='Féminin'>Féminin</option>
-            </Input>
-            {validation.touched.gender && validation.errors.gender ? (
+            />
+            {validation.touched.phoneNumber && validation.errors.phoneNumber ? (
               <FormFeedback type='invalid'>
-                {validation.errors.gender}
+                {validation.errors.phoneNumber}
               </FormFeedback>
             ) : null}
           </FormGroup>
@@ -233,7 +222,7 @@ const FournisseurForm = ({ fournisseurToEdit, tog_form_modal }) => {
         </Col>
       </Row>
       <Row>
-        <Col md='6'>
+        <Col md='12'>
           <FormGroup className='mb-3'>
             <Label htmlFor='emailAdresse'>Adresse Email</Label>
 
@@ -258,60 +247,6 @@ const FournisseurForm = ({ fournisseurToEdit, tog_form_modal }) => {
             validation.errors.emailAdresse ? (
               <FormFeedback type='invalid'>
                 {validation.errors.emailAdresse}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-        <Col md='6'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='phoneNumber'>Téléphone</Label>
-            <Input
-              name='phoneNumber'
-              placeholder='70 00 00 00'
-              type='number'
-              className='form-control'
-              id='phoneNumber'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.phoneNumber || ''}
-              invalid={
-                validation.touched.phoneNumber && validation.errors.phoneNumber
-                  ? true
-                  : false
-              }
-            />
-            {validation.touched.phoneNumber && validation.errors.phoneNumber ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.phoneNumber}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col md='12'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='marchandise'>Marchandise</Label>
-            <Input
-              name='marchandise'
-              type='text'
-              placeholder='médicament; matériels...'
-              className='form-control'
-              id='marchandise'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.marchandise || ''}
-              invalid={
-                validation.touched.marchandise && validation.errors.marchandise
-                  ? true
-                  : false
-              }
-            />
-
-            {validation.touched.marchandise && validation.errors.marchandise ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.marchandise}
               </FormFeedback>
             ) : null}
           </FormGroup>

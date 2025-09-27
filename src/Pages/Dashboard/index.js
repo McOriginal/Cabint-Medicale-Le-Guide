@@ -16,7 +16,7 @@ import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
 import { hospitalName } from '../CompanyInfo/CompanyInfo';
 
 const Dashboard = () => {
-  document.title = 'Santé MARHABA';
+  document.title = `Tableau de Bord ${hospitalName}`;
 
   return (
     <React.Fragment>

@@ -142,32 +142,33 @@ export default function MedicamentListe() {
             </Col>
           </Row>
           <Row>
-            {isLoading && <LoadingSpiner />}
-            {error && (
-              <div className='text-danger text-center'>
-                Erreur lors de chargement des données
-              </div>
-            )}
-            {!error && !isLoading && filterSearchMedicaments?.length === 0 && (
-              <div className='text-center'>Aucun Médicament trouvés</div>
-            )}
-            {!error &&
-              !isLoading &&
-              filterSearchMedicaments?.length > 0 &&
-              filterSearchMedicaments?.map((medica) => (
-                <Col sm={6} lg={4} key={medica?._id}>
+            <div className='d-flex justify-content-center align-items-center gap-4 flex-wrap'>
+              {isLoading && <LoadingSpiner />}
+              {error && (
+                <div className='text-danger text-center'>
+                  Erreur lors de chargement des données
+                </div>
+              )}
+              {!error &&
+                !isLoading &&
+                filterSearchMedicaments?.length === 0 && (
+                  <div className='text-center'>Aucun Médicament trouvés</div>
+                )}
+              {!error &&
+                !isLoading &&
+                filterSearchMedicaments?.length > 0 &&
+                filterSearchMedicaments?.map((medica) => (
                   <Card
+                    key={medica?._id}
                     style={{
                       boxShadow: '0px 0px 10px rgba(121,3,105,0.5)',
                       borderRadius: '15px',
-                      // height: '120px',
                       padding: '10px 20px',
                       display: 'flex',
-                      gap: '20px',
-                      // flexDirection: 'row',
-                      // flexWrap: 'nowrap',
+                      flexWrap: 'nowrap',
                       alignItems: 'center',
                       position: 'relative',
+                      width: '210px',
                     }}
                   >
                     <div
@@ -222,12 +223,17 @@ export default function MedicamentListe() {
                         </DropdownMenu>
                       </UncontrolledDropdown>
                     </div>
+                    <CardTitle
+                      style={{ position: 'absolute', top: '5%', left: '5%' }}
+                    >
+                      {formatPrice(medica?.achatPrice)} F
+                    </CardTitle>
                     <img
                       className='img-fluid'
                       style={{
                         borderRadius: '15px 15px 0 0',
-                        height: '100%',
-                        width: '30%',
+                        height: '100px',
+                        width: '60%',
                         objectFit: 'contain',
                       }}
                       src={medica?.imageUrl ? medica?.imageUrl : imgMedicament}
@@ -235,39 +241,33 @@ export default function MedicamentListe() {
                     />
 
                     <CardBody>
-                      <CardTitle className='fs-6'>
-                        Nom:
-                        <span style={{ color: 'gray' }}>
-                          {' '}
-                          {capitalizeWords(medica?.name)}
-                        </span>{' '}
+                      <CardTitle className='fs-6 text-center'>
+                        {capitalizeWords(medica?.name)}
                       </CardTitle>
-                      <CardTitle className='fs-6'>
+                      <CardTitle className='fs-6 text-center'>
                         Stock:
                         {medica?.stock >= 10 ? (
-                          <span style={{ color: 'gray' }}>
+                          <span
+                            style={{ color: 'gray' }}
+                            className='text-center'
+                          >
                             {' '}
                             {formatPrice(medica?.stock)}
                           </span>
                         ) : (
-                          <span className='text-danger'>
+                          <span className='text-danger text-center'>
                             {' '}
                             {formatPrice(medica?.stock)}
                           </span>
                         )}
                       </CardTitle>
-                      <CardTitle>
-                        {' '}
-                        Prix:{' '}
-                        <span style={{ color: 'gray' }}>
-                          {' '}
-                          {formatPrice(medica?.price)} F
-                        </span>{' '}
+                      <CardTitle className='text-center'>
+                        {formatPrice(medica?.price)} F
                       </CardTitle>
                     </CardBody>
                   </Card>
-                </Col>
-              ))}
+                ))}
+            </div>
           </Row>
         </Container>
       </div>

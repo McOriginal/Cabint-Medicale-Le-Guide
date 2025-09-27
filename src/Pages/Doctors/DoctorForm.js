@@ -34,13 +34,11 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
     initialValues: {
       firstName: doctorToEdit?.firstName || '',
       lastName: doctorToEdit?.lastName || '',
-      dateOfBirth: doctorToEdit?.dateOfBirth?.substring(0, 10) || '',
       gender: doctorToEdit?.gender || '',
       phoneNumber: doctorToEdit?.phoneNumber || undefined,
       adresse: doctorToEdit?.adresse || '',
       emailAdresse: doctorToEdit?.emailAdresse || '',
       speciality: doctorToEdit?.speciality || '',
-      salaire: doctorToEdit?.salaire || undefined,
       statut: doctorToEdit?.statut || '',
       guardDays: doctorToEdit?.guardDays || '',
     },
@@ -53,19 +51,16 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
         .matches(/^[a-zA-ZÀ-ÿ\s'-]+$/, 'Veillez Entrez une valeur correct !')
         .required('Ce champ Prénom est obligatoire'),
       gender: Yup.string().required('Ce champ est obligatoire'),
-      dateOfBirth: Yup.date(),
       phoneNumber: Yup.number().required('Ce champ est obligatoire'),
-      emailAdresse: Yup.string()
-        .matches(
-          /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-          'Veillez Entrez un Email correct !'
-        )
-        .required('Ce champ est obligatoire'),
+      emailAdresse: Yup.string().matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        'Veillez Entrez un Email correct !'
+      ),
       speciality: Yup.string().required('Ce champ est obligatoire'),
-      adresse: Yup.string()
-        .matches(/^[a-z0-9À-ÿ\\s]+$/i, 'Veillez Entrez une valeur correct !')
-        .required('Ce champ est obligatoire'),
-      salaire: Yup.number().typeError('Ce champ doit être un nombre'),
+      adresse: Yup.string().matches(
+        /^[a-z0-9À-ÿ\\s]+$/i,
+        'Veillez Entrez une valeur correct !'
+      ),
       guardDays: Yup.string(),
       statut: Yup.string(),
     }),
@@ -215,25 +210,25 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
 
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='dateOfBirth'>Date de Naissance</Label>
+            <Label htmlFor='phoneNumber'>Téléphone</Label>
             <Input
-              name='dateOfBirth'
-              type='date'
-              max={new Date().toISOString().split('T')[0]}
+              name='phoneNumber'
+              placeholder='70 00 00 00'
+              type='number'
               className='form-control'
-              id='dateOfBirth'
+              id='phoneNumber'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.dateOfBirth || ''}
+              value={validation.values.phoneNumber || ''}
               invalid={
-                validation.touched.dateOfBirth && validation.errors.dateOfBirth
+                validation.touched.phoneNumber && validation.errors.phoneNumber
                   ? true
                   : false
               }
             />
-            {validation.touched.dateOfBirth && validation.errors.dateOfBirth ? (
+            {validation.touched.phoneNumber && validation.errors.phoneNumber ? (
               <FormFeedback type='invalid'>
-                {validation.errors.dateOfBirth}
+                {validation.errors.phoneNumber}
               </FormFeedback>
             ) : null}
           </FormGroup>
@@ -295,32 +290,7 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
       </Row>
 
       <Row>
-        <Col md='6'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='phoneNumber'>Téléphone</Label>
-            <Input
-              name='phoneNumber'
-              placeholder='70 00 00 00'
-              type='number'
-              className='form-control'
-              id='phoneNumber'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.phoneNumber || ''}
-              invalid={
-                validation.touched.phoneNumber && validation.errors.phoneNumber
-                  ? true
-                  : false
-              }
-            />
-            {validation.touched.phoneNumber && validation.errors.phoneNumber ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.phoneNumber}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-        <Col md='6'>
+        <Col md='12'>
           <FormGroup className='mb-3'>
             <Label htmlFor='speciality'>Spécialité</Label>
             <Input
@@ -364,33 +334,7 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
           </FormGroup>
         </Col>
       </Row>
-      <Row>
-        <Col md='12'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='salaire'>Salaire</Label>
-            <Input
-              name='salaire'
-              type='number'
-              className='form-control'
-              id='salaire'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.salaire || ''}
-              invalid={
-                validation.touched.salaire && validation.errors.salaire
-                  ? true
-                  : false
-              }
-            />
 
-            {validation.touched.salaire && validation.errors.salaire ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.salaire}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-      </Row>
       <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>

@@ -4,8 +4,15 @@ import api from './api';
 // Créer une nouvelle Depense
 export const useCreateDepense = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
-    mutationFn: (data) => api.post('/depenses/createDepense', data),
+    mutationFn: (data) =>
+      api.post('/depenses/createDepense', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['depenses']),
   });
 };

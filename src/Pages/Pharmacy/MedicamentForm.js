@@ -38,12 +38,14 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
       name: medicamentToEdit?.name || '',
       stock: medicamentToEdit?.stock || undefined,
       price: medicamentToEdit?.price || undefined,
+      achatPrice: medicamentToEdit?.achatPrice || undefined,
       imageUrl: medicamentToEdit?.imageUrl || '',
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Ce champ est obligatoire'),
 
-      stock: Yup.number().required('Ce champ est obligatoire'),
+      stock: Yup.number(),
+      achatPrice: Yup.number(),
       price: Yup.number().required('Ce champ est obligatoire'),
     }),
 
@@ -165,6 +167,33 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
           </FormGroup>
         </Col>
         <Col sm='6'>
+          <FormGroup className='mb-3'>
+            <Label htmlFor='achatPrice'>Prix d'Achat</Label>
+            <Input
+              name='achatPrice'
+              placeholder='Entrez les prix de médicament'
+              type='number'
+              className='form-control'
+              id='achatPrice'
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.achatPrice || ''}
+              invalid={
+                validation.touched.achatPrice && validation.errors.achatPrice
+                  ? true
+                  : false
+              }
+            />
+            {validation.touched.achatPrice && validation.errors.achatPrice ? (
+              <FormFeedback type='invalid'>
+                {validation.errors.achatPrice}
+              </FormFeedback>
+            ) : null}
+          </FormGroup>
+        </Col>
+      </Row>
+      <Row>
+        <Col sm='12'>
           <FormGroup className='mb-3'>
             <Label htmlFor='price'>Prix de Vente</Label>
             <Input

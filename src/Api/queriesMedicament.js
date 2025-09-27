@@ -4,8 +4,15 @@ import api from './api';
 // Créer une nouvelle Medicaments
 export const useCreateMedicament = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
-    mutationFn: (data) => api.post('/medicaments/addMedicament', data),
+    mutationFn: (data) =>
+      api.post('/medicaments/addMedicament', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['medicaments']),
   });
 };

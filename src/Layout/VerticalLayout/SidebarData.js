@@ -70,7 +70,7 @@ const SidebarData = [
     icon: 'dripicons-pill',
     subItem: [
       { sublabel: 'Liste Médicament', link: '/medicaments' },
-      { sublabel: 'Médicament Sans Stock', link: '/medicaments_no_stock' },
+      { sublabel: 'Stock Faible', link: '/medicaments_no_stock' },
       { sublabel: 'Historique Approvisionnements', link: '/approvisonnements' },
     ],
   },

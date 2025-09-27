@@ -4,9 +4,15 @@ import api from './api';
 // Créer une nouvelle Paiement
 export const useCreatePaiementHistorique = () => {
   const queryClient = useQueryClient();
+  const authUser = localStorage.getItem('authUser');
+
   return useMutation({
     mutationFn: (data) =>
-      api.post('/paiements_historique/createPaiementHistorique', data),
+      api.post('/paiements_historique/createPaiementHistorique', data, {
+        headers: {
+          Authorization: `Bearer ${authUser?.token}`,
+        },
+      }),
     onSuccess: () => queryClient.invalidateQueries(['paiements_historique']),
   });
 };

@@ -1,26 +1,7 @@
 {
-  "name": "clinique_keneya",
+  "name": "gestion-clinique",
   "version": "1.3.0",
   "private": true,
-  "description": "Application de Gestion Clinique",
-  "homepage": "https://github.com/McOriginal/Clinique-Keneya#readme",
-  "bugs": {
-    "url": "https://github.com/McOriginal/Clinique-Keneya/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/McOriginal/Clinique-Keneya.git"
-  },
-  "license": "ISC",
-  "author": "Mohamed Cisse",
-  "type": "commonjs",
-  "main": "index.js",
-  "scripts": {
-    "start": "react-scripts --openssl-legacy-provider start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^43.3.1",
     "@ckeditor/ckeditor5-react": "^9.3.1",
@@ -65,6 +46,7 @@
     "react-dom": "^18.3.1",
     "react-draft-wysiwyg": "^1.15.0",
     "react-dropzone": "^14.3.5",
+    "react-export-table-to-excel": "^1.0.6",
     "react-flatpickr": "^3.10.13",
     "react-i18next": "^15.1.1",
     "react-input-mask": "^2.0.4",
@@ -81,6 +63,7 @@
     "react-super-responsive-table": "^6.0.0",
     "react-switch": "^7.0.0",
     "react-table": "^7.8.0",
+    "react-to-print": "^3.1.1",
     "reactstrap": "^9.2.3",
     "recharts": "^2.13.3",
     "redux": "^5.0.1",
@@ -96,7 +79,12 @@
     "yet-another-react-lightbox": "^3.21.7",
     "yup": "^1.6.1"
   },
-  "devDependencies": {},
+  "scripts": {
+    "start": "react-scripts --openssl-legacy-provider start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -107,12 +95,21 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "ie 11",
+      "android >= 4.4",
+      "ios >= 9"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "overrides": {
+    "source-map-loader": {
+      "exclude": [
+        "node_modules/html2pdf.js"
+      ]
+    }
   }
 }

@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import withRouter from '../../components/Common/withRouter';
 
@@ -22,9 +22,8 @@ import {
 } from '../../store/actions';
 
 import { createSelector } from 'reselect';
-import { AuthContext } from '../../Auth/AuthContext';
-import SidebarMedecins from './SidebarMedecins';
 import { connectedUserRole } from '../../Pages/Authentication/userInfos';
+import SidebarUsers from './SidebarUsers';
 
 const Layout = (props) => {
   const dispatch = useDispatch();
@@ -135,7 +134,7 @@ const Layout = (props) => {
       );
     } else if (role === 'medecin') {
       setContentSidebar(
-        <SidebarMedecins
+        <SidebarUsers
           theme={leftSideBarTheme}
           type={leftSideBarType}
           isMobile={isMobile}

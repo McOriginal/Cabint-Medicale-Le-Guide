@@ -23,10 +23,10 @@ import {
   successMessageAlert,
 } from '../components/AlerteModal';
 import LoadingSpiner from '../components/LoadingSpiner';
-import { hospitalName, logoMedical } from '../Logo/logo';
+import { hospitalName, logoMedical } from '../CompanyInfo/CompanyInfo';
 
 const Login = () => {
-  document.title = 'Connexion | Santé MARHABA ';
+  document.title = `Connexion | ${hospitalName}`;
 
   // Query de Login
   const { mutate: loginUser } = useLogin();
@@ -64,7 +64,7 @@ const Login = () => {
 
           resetForm();
           // Afficher un message de succès ou une alerte
-          successMessageAlert('Connexion réussie !');
+          successMessageAlert('Vous êtes conntecté avec succès !');
           // Redirection vers le tableau de bord
           setTimeout(() => {
             try {
@@ -80,12 +80,10 @@ const Login = () => {
                 case 'admin':
                   navigate('/dashboard');
                   break;
-                case 'medecin':
-                  navigate('/dashboard-medecin');
+                case 'users':
+                  navigate('/users-dashboard');
                   break;
-                case 'secretaire':
-                  navigate('/dashboard-secretaire');
-                  break;
+
                 default:
                   errorMessageAlert('Rôle non reconnu.');
               }
@@ -245,11 +243,11 @@ const Login = () => {
                 </Card>
                 <div className='mt-5 text-center'>
                   <p className='text-white-50'>
-                    © {new Date().getFullYear()} Santé MARHABA |{' '}
+                    © {new Date().getFullYear()} {hospitalName} |{' '}
                     <i className='mdi mdi-heart text-danger'></i> Créé Par{' '}
-                    <Link to={'https://www.cissemohamed.com'} target='blank'>
+                    <a href='https://www.cissemohamed.com' target='blank'>
                       Cisse Mohamed
-                    </Link>
+                    </a>
                   </p>
                 </div>
               </Col>

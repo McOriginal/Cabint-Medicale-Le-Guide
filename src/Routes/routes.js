@@ -65,6 +65,11 @@ const sharedRoutes = [
   { path: '/updatePassword', component: <UpdatePassword /> },
 
   { path: '/userprofile', component: <UserProfile /> },
+  // Chambre
+  { path: '/chambres', component: <Chambre /> },
+
+  // Matériels
+  { path: '/materiels', component: <Materiels /> },
 ];
 
 // Routes pour les ADMINS
@@ -108,12 +113,6 @@ const authProtectedRoutes = [
 
   // Outils Médicals
 
-  // Chambre
-  { path: '/chambres', component: <Chambre /> },
-
-  // Matériels
-  { path: '/materiels', component: <Materiels /> },
-
   // Médicament Pharmaceutique
   { path: '/medicaments', component: <MedicamentListe /> },
 
@@ -137,24 +136,25 @@ const authProtectedRoutes = [
   { path: '/pages-faqs', component: <FAQs /> },
   { path: '/pages-pricing', component: <Pricing /> },
 
-  { path: '/register', component: <Register /> },
+  // { path: '/register', component: <Register /> },
 ];
 
 // Routes pour les Médecins
-const medecinsRoutes = [
+const usersRoutes = [
   {
     path: '/',
     exact: true,
-    component: <Navigate to='/dashboard-medecin' />,
+    component: <Navigate to='/users-dashboard' />,
   },
   //dashboard
-  { path: '/dashboard-medecin', component: <Dashboard /> },
+  { path: '/users-dashboard', component: <Dashboard /> },
 ];
 
 const publicRoutes = [
   // { path: '/unauthorized', component: <Unauthorized /> },
 
   // Authentication Page
+  { path: '/register', component: <Register /> },
 
   { path: '/login', component: <Login /> },
   { path: '/forgotPassword', component: <ForgetPasswordPage /> },
@@ -174,4 +174,4 @@ const publicRoutes = [
   { path: '/pages-comingsoon', component: <ComingSoon /> },
 ];
 
-export { authProtectedRoutes, medecinsRoutes, publicRoutes, sharedRoutes };
+export { authProtectedRoutes, usersRoutes, publicRoutes, sharedRoutes };

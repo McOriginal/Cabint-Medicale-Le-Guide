@@ -14,9 +14,9 @@ import HorizontalLayout from '../Layout/HorizontalLayout/index';
 
 import {
   authProtectedRoutes,
-  medecinsRoutes,
   publicRoutes,
   sharedRoutes,
+  usersRoutes,
 } from './routes';
 
 import { createSelector } from 'reselect';
@@ -84,7 +84,7 @@ const Index = () => {
           <Route
             path={route.path}
             element={
-              <PrivateRoute allowedRoles={['admin', 'medecin']}>
+              <PrivateRoute allowedRoles={['admin', 'user']}>
                 <Layout>{route.component}</Layout>
               </PrivateRoute>
             }
@@ -112,11 +112,11 @@ const Index = () => {
 
       {/*  Routes uniquement pour les  Médecins */}
       <Route>
-        {medecinsRoutes.map((route, idx) => (
+        {usersRoutes.map((route, idx) => (
           <Route
             path={route.path}
             element={
-              <PrivateRoute allowedRoles={['medecin']}>
+              <PrivateRoute allowedRoles={['user']}>
                 <Layout>{route.component}</Layout>
               </PrivateRoute>
             }

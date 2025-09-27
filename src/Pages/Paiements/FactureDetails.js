@@ -22,7 +22,7 @@ import {
   hospitalName,
   hospitalTel,
   logoMedical,
-} from '../Logo/logo';
+} from '../CompanyInfo/CompanyInfo';
 
 export default function FactureDetails() {
   const { id } = useParams();

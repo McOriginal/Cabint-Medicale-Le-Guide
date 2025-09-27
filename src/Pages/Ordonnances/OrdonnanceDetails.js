@@ -17,7 +17,7 @@ import {
   hospitalName,
   hospitalTel,
   logoMedical,
-} from '../Logo/logo';
+} from '../CompanyInfo/CompanyInfo';
 
 const OrdonnanceDetails = ({
   show_modal,

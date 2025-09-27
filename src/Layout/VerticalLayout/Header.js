@@ -16,7 +16,7 @@ import {
   hospitalLittleName,
   hospitalName,
   logoMedical,
-} from '../../Pages/Logo/logo';
+} from '../../Pages/CompanyInfo/CompanyInfo';
 
 const Header = (props) => {
   function toggleFullscreen() {

@@ -22,7 +22,7 @@ import { useFormik } from 'formik';
 // action
 
 // import images
-import { logoMedical } from '../Logo/logo';
+import { logoMedical } from '../CompanyInfo/CompanyInfo';
 import LoadingSpiner from '../components/LoadingSpiner';
 import {
   errorMessageAlert,

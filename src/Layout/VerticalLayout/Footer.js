@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Container, Row, Col } from 'reactstrap';
+import { hospitalName } from '../../Pages/CompanyInfo/CompanyInfo';
 
 const Footer = () => {
   return (
@@ -9,18 +10,18 @@ const Footer = () => {
         <Container fluid={true}>
           <Row>
             <Col sm={6}>
-              {new Date().getFullYear()} © Centre de Santé MARHABA.
+              {new Date().getFullYear()} © {hospitalName}.
             </Col>
             <Col sm={6}>
               <div className='text-sm-end d-none d-sm-block'>
                 Crafted with <i className='mdi mdi-heart text-danger'></i> by{' '}
-                <Link
-                  to='https://www.cissemohamed.com'
+                <a
+                  href='https://www.cissemohamed.com'
                   target='blank'
                   className='text-decoration-underline'
                 >
                   Cisse Mohamed{' '}
-                </Link>
+                </a>
               </div>
             </Col>
           </Row>

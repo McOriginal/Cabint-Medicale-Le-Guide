@@ -7,49 +7,36 @@ const UsersSidebarData = [
     label: 'Tabelau de Bord',
     icon: 'mdi mdi-home-variant-outline',
     isHasArrow: true,
-    url: '/dashboard-user',
+    url: '/dashboard-medecin',
+  },
+
+  {
+    label: 'Rendez-vous',
+    icon: 'mdi mdi-calendar-outline',
+    isHasArrow: true,
+    url: '/appointments',
   },
 
   // --------------------------------------
+
+  // ----------------------------------------------------------------------
+  // Patients, Traitements & Ordonnances
   {
-    label: 'Produits',
+    label: 'Traitements & Ordonnances',
     isMainMenu: true,
   },
   {
-    label: 'Produits',
-    icon: 'mdi mdi-sitemap',
+    label: 'Patients',
+    icon: 'fas fa-procedures',
     isHasArrow: true,
-    url: '/produits',
+    url: '/patients',
   },
   {
-    label: 'Commande & Facture',
-    isMainMenu: true,
-  },
-
-  {
-    label: 'Commande',
-    icon: 'fas fa-server',
+    label: 'Traitements',
+    // icon: 'fas fa-file-medical-alt',
+    icon: 'fas fa-heartbeat',
     isHasArrow: true,
-    url: '/commandes',
-  },
-  {
-    label: 'Nouvelle Commande',
-    icon: 'fas fa-shopping-cart',
-    isHasArrow: true,
-    url: '/newCommande',
-  },
-
-  // Transactions / Comptabilité
-  {
-    label: 'Comptabilité',
-    isMainMenu: true,
-  },
-
-  {
-    label: 'Entrées (Paiement)',
-    icon: 'fas fa-euro-sign',
-    isHasArrow: true,
-    url: '/paiements',
+    url: '/traitements',
   },
 ];
 export default UsersSidebarData;

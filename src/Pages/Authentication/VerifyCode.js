@@ -20,12 +20,12 @@ import { useFormik } from 'formik';
 // action
 
 // import images
-import { logoMedical } from '../Logo/logo';
 import LoadingSpiner from '../components/LoadingSpiner';
 import {
   errorMessageAlert,
   successMessageAlert,
 } from '../components/AlerteModal';
+import { logoMedical } from '../CompanyInfo/CompanyInfo';
 
 const VerifyCode = () => {
   document.title = 'Vérification de code | MARHABA Santé';

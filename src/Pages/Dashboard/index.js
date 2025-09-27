@@ -13,6 +13,7 @@ import TotalBed from './TotalBed';
 import TotalTraitement from './TotalTraitement';
 import BarChartDataRaportsTraitement from '../Raports/DataRaportsTraitement';
 import SelectedMounthTotalTraitement from './SelectedMounthTotalTraitement';
+import { hospitalName } from '../CompanyInfo/CompanyInfo';
 
 const Dashboard = () => {
   document.title = 'Santé MARHABA';
@@ -21,7 +22,7 @@ const Dashboard = () => {
     <React.Fragment>
       <div className='page-content'>
         <Container fluid={true}>
-          <Breadcrumbs title='Santé MARHABA' breadcrumbItem='Tabelau de Bord' />
+          <Breadcrumbs title={hospitalName} breadcrumbItem='Tabelau de Bord' />
 
           <motion.div
             initial={{ opacity: 0, y: 70 }}

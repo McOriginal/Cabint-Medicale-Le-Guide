@@ -20,7 +20,7 @@ import {
   hospitalName,
   hospitalTel,
   logoMedical,
-} from '../Logo/logo';
+} from '../CompanyInfo/CompanyInfo';
 import html2pdf from 'html2pdf.js';
 
 export default function FactureListe() {

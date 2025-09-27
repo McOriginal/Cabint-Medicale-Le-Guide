@@ -24,10 +24,10 @@ import {
   successMessageAlert,
 } from '../components/AlerteModal';
 import LoadingSpiner from '../components/LoadingSpiner';
-import { logoMedical } from '../Logo/logo';
+import { hospitalName, logoMedical } from '../CompanyInfo/CompanyInfo';
 
 const Register = () => {
-  document.title = 'Inscription | Santé MARHABA ';
+  document.title = `Inscription | ${hospitalName}`;
 
   //   RegisterQuery
   const { mutate: registerUser } = useRegister();
@@ -111,7 +111,7 @@ const Register = () => {
                     />
                   </div>
                   <h4 className='font-size-18 text-info mt-2 text-center'>
-                    Cabinet de soins MARHABA Santé
+                    {hospitalName}
                   </h4>
                   <p className='font-size-16 text-muted text-center mt-2'>
                     Créer un compte
@@ -170,7 +170,7 @@ const Register = () => {
                           >
                             <option value=''>Sélectionner un rôle</option>
                             <option value='admin'>Administrateur</option>
-                            <option value='medecin'>Médecin</option>
+                            <option value='users'>Utilisateur</option>
                           </Input>
                           {validation.touched.role && validation.errors.role ? (
                             <FormFeedback type='invalid'>
@@ -267,11 +267,11 @@ const Register = () => {
               </Card>
               <div className='mt-5 text-center'>
                 <p className='text-white-50'>
-                  © {new Date().getFullYear()} Santé MARHABA |{' '}
+                  © {new Date().getFullYear()} {hospitalName} |{' '}
                   <i className='mdi mdi-heart text-danger'></i> Créé Par{' '}
-                  <Link to={'https://www.cissemohamed.com'} target='blank'>
+                  <a href={'https://www.cissemohamed.com'} target='blank'>
                     Cisse Mohamed
-                  </Link>
+                  </a>
                 </p>
               </div>
             </Col>

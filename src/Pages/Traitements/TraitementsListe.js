@@ -223,7 +223,10 @@ export default function TraitementsListe() {
             !isLoading &&
             filterTraitementSearch?.length > 0 &&
             displayMode === 'list' ? (
-              <div className='table-responsive table-card mt-3 mb-1'>
+              <div
+                className='table-responsive table-card mt-3 mb-1'
+                style={{ minHeight: '250px' }}
+              >
                 <table
                   className='table align-middle text-center table-nowrap table-hover'
                   id='traitementTable'

@@ -39,7 +39,7 @@ export const useOneOrdonnance = (id) =>
   useQuery({
     queryKey: ['ordonnances', id],
     queryFn: () =>
-      api.get(`/ordonnances/details/${id}`).then((res) => res.data),
+      api.get(`/ordonnances/getOrdonnance/${id}`).then((res) => res.data),
     enabled: Boolean(id),
     staleTime: 1000 * 60 * 5, //chaque 5 minutes rafraichir les données
   });

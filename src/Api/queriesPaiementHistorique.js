@@ -27,12 +27,13 @@ export const useUpdatePaiementHistorique = () => {
   });
 };
 // Lire toutes les paiements_historique
-export const useAllPaiementsHistorique = (id) =>
+
+export const useAllPaiementsHistorique = () =>
   useQuery({
-    queryKey: ['paiements_historique', id],
+    queryKey: ['paiements_historique'],
     queryFn: () =>
       api
-        .get(`/paiements_historique/getAllPaiementsHistorique/${id}`)
+        .get('/paiements_historique/getAllPaiementsHistorique')
         .then((res) => res.data),
   });
 

@@ -46,6 +46,7 @@ import ResetPassword from '../Pages/Authentication/ResetPassword.js';
 import UpdateOrdonance from '../Pages/Ordonnances/UpdateOrdonance.js';
 import UsersProfilesListe from '../Pages/Authentication/UsersProfilesListe.js';
 import OrdonnanceDetails from '../Pages/Ordonnances/OrdonnanceDetails.js';
+import DetailsOrdonnance from '../Pages/Ordonnances/Details/DetailsOrdonnance.js';
 
 const sharedRoutes = [
   //appointments
@@ -88,7 +89,7 @@ const authProtectedRoutes = [
   { path: '/ordonnances', component: <OrdonnanceListe /> },
 
   // Ordonnance
-  { path: '/ordonnances/details/:id', component: <OrdonnanceDetails /> },
+  { path: '/ordonnance/details/:id', component: <DetailsOrdonnance /> },
 
   // Update Ordonnance
   { path: '/traitements/updateOrdonnance/:id', component: <UpdateOrdonance /> },

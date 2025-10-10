@@ -36,14 +36,13 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
 
     initialValues: {
       name: medicamentToEdit?.name || '',
-      stock: medicamentToEdit?.stock || undefined,
+      stock: medicamentToEdit?.stock || 0,
       price: medicamentToEdit?.price || undefined,
       achatPrice: medicamentToEdit?.achatPrice || undefined,
       imageUrl: medicamentToEdit?.imageUrl || '',
     },
     validationSchema: Yup.object({
       name: Yup.string().required('Ce champ est obligatoire'),
-
       stock: Yup.number(),
       achatPrice: Yup.number(),
       price: Yup.number().required('Ce champ est obligatoire'),
@@ -146,13 +145,14 @@ const MedicamentForm = ({ medicamentToEdit, tog_form_modal }) => {
             <Label htmlFor='stock'>Stock Disponible</Label>
             <Input
               name='stock'
-              placeholder='10; 4; 0'
+              placeholder='Stock initial du Médicament'
               type='number'
-              className='form-control'
+              min={0}
+              className='form-control border-1 border-secondary'
               id='stock'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
-              value={validation.values.stock || ''}
+              value={validation.values.stock || undefined}
               invalid={
                 validation.touched.stock && validation.errors.stock
                   ? true

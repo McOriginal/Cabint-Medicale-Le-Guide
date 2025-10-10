@@ -39,11 +39,6 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
     isLoading: patientLoading,
     error: patientError,
   } = useAllPatients();
-  const {
-    data: doctorData,
-    isLoading: doctorLoading,
-    error: doctorError,
-  } = useAllDoctors();
 
   const [isLoading, setisLoading] = useState(false);
 
@@ -69,7 +64,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
     initialValues: {
       patient: traitementToEdit?.patient._id || '',
       motif: traitementToEdit?.motif || '',
-      startDate: traitementToEdit?.startDate.substring(0, 10) || '',
+      startDate:
+        traitementToEdit?.startDate.substring(0, 10) ||
+        new Date().toISOString().substring(0, 10),
       startTime: traitementToEdit?.startTime || '',
       height: traitementToEdit?.height || '',
       width: traitementToEdit?.width || '',
@@ -80,7 +77,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
       result: traitementToEdit?.result || '',
       totalAmount: traitementToEdit?.totalAmount || '',
       observation: traitementToEdit?.observation || '',
-      doctor: traitementToEdit?.doctor._id || '',
+      doctor: traitementToEdit?.doctor || '',
     },
     validationSchema: Yup.object({
       patient: Yup.string().required(
@@ -146,8 +143,6 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             setisLoading(false);
             resetForm();
             tog_form_modal();
-            console.log('VALUES: ', values);
-            console.log('ID: ', values._id);
           },
           onError: (err) => {
             const errorMessage =
@@ -311,7 +306,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
                 name='startDate'
                 id='startDate'
                 className='border border-secondary form-control'
-                max={new Date().toISOString().split('T')[0]} // Prevent future dates
+                max={new Date().toISOString().substring(0, 10)} // Prevent future dates
                 value={validation.values.startDate || ''}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
@@ -326,7 +321,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               ) : null}
             </FormGroup>
             <FormGroup>
-              <Label htmlFor='startTime'>Période du jour</Label>
+              <Label htmlFor='startTime'>Période du début maladie</Label>
               <Input
                 type='select'
                 name='startTime'
@@ -460,30 +455,16 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
             <FormGroup>
               <Label htmlFor='medecin'>Médecin</Label>
               <Input
-                type='select'
+                type='text'
                 name='doctor'
                 id='medecin'
+                placeholder='Nom du Médecin / Docteur'
                 className='border border-secondary form-control'
                 value={validation.values.doctor}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
-              >
-                {patientLoading && <LoadingSpiner />}
-                {patientError && (
-                  <div className='fw-bold text-danger text-center'></div>
-                )}
-                <option value=''>Sélectionner un Médecin</option>
-                {!doctorError &&
-                  !doctorLoading &&
-                  doctorData?.length > 0 &&
-                  doctorData.map((doc) => (
-                    <option key={doc._id} value={doc._id}>
-                      {capitalizeWords(doc.firstName)} {' - '}
-                      {capitalizeWords(doc.lastName)} {' - '}
-                      {new Date(doc.dateOfBirth).toLocaleDateString()}
-                    </option>
-                  ))}
-              </Input>
+              />
+
               {validation.touched.doctor && validation.errors.doctor ? (
                 <FormFeedback type='invalid'>
                   {validation.errors.doctor}
@@ -493,17 +474,19 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
           </TabPane>
           <TabPane tabId={4}>
             <FormGroup>
-              <Label htmlFor='totalAmount'>Montant total </Label>
-              <p className='text-mutate'>
+              <Label htmlFor='totalAmount'>
+                Frais de Traitement / Consulation{' '}
+              </Label>
+              {/* <p className='text-mutate'>
                 Uniquement la somme total de votre frais de traitement,{' '}
                 <span className='text-info'>sans l'Ordonnances</span>{' '}
-              </p>
+              </p> */}
               <Input
                 type='number'
                 name='totalAmount'
                 id='totalAmount'
                 className='border border-secondary from-control'
-                placeholder='Montant total du traitement'
+                placeholder='Frais de services (Traitement ou Consultation)'
                 value={validation.values.totalAmount || ''}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}

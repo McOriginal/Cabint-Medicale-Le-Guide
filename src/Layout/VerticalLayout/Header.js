@@ -70,7 +70,6 @@ const Header = (props) => {
                   }}
                   alt=''
                 />
-                <h5 className='text-white'>{hospitalLittleName} </h5>
               </span>
             </div>
 
@@ -82,19 +81,12 @@ const Header = (props) => {
                 tToggle();
               }}
             >
-              <i className='ri-menu-2-line align-middle'></i>
+              <i className='fas fa-align-justify align-middle text-info'></i>
             </button>
-
-            <p
-              className='d-flex justify-content-center align-items-center fw-bold font-size-16'
-              style={{
-                color: ' #27548A',
-              }}
-            >
-              {hospitalName}
-            </p>
           </div>
-
+          <p className='d-none d-md-flex justify-content-center align-items-center fw-bold font-size-16 text-info'>
+            {hospitalName?.toUpperCase()}
+          </p>
           <div className='d-flex'>
             <div className='dropdown d-none d-lg-inline-block ms-1'>
               <button

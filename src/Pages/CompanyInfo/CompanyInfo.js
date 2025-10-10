@@ -1,8 +1,8 @@
 import logoMedical from '../../assets/images/logo.png';
 
-const hospitalName = 'Clique Médicale Keneya';
+const hospitalName = 'Cabinet Médicale Le Guide';
 
-const hospitalLittleName = 'Clinique Keneya';
+const hospitalLittleName = 'Cabinet Le Guide';
 
 const hospitalAdresse =
   'Niamakoro sur la route de Daoudabou à 100m de feu tricolor';

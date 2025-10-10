@@ -17,8 +17,6 @@ export default function OrdonnanceListe() {
   // Afficher toutes les ordonnances
   const { data: ordonnances, isLoading, error } = useAllOrdonnances();
 
-  // ID de l'ordonnance sélectionnée pour les détails
-  const [selectedOrdonnanceID, setSelectedOrdonnanceID] = useState(false);
   // Annuler une Ordonnance en suite la supprimer
   const { mutate: deleteAndDecrementMultipleStocks, isLoading: isDeletting } =
     useDeleteOrdonnance();
@@ -120,12 +118,7 @@ export default function OrdonnanceListe() {
         <Container fluid>
           <Breadcrumbs title='Traitements' breadcrumbItem='Ordonnances' />
           {/* -------------------------- */}
-          <OrdonnanceDetails
-            show_modal={show_modal}
-            setForm_modal={setShow_modal}
-            tog_show_modal={tog_show_modal}
-            selectedOrdonnanceID={selectedOrdonnanceID} // Pass the selected ordonnance ID here
-          />
+
           <Row>
             <Col lg={12}>
               <Card>

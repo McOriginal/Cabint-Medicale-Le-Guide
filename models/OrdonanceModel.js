@@ -16,6 +16,11 @@ const ordonanceSchema = new mongoose.Schema(
           ref: 'Medicament',
           required: true,
         },
+        protocole: {
+          type: String,
+          required: true,
+          trim: true,
+        },
         quantity: {
           type: Number,
           required: [true, 'La quantité est requise'],
@@ -33,6 +38,11 @@ const ordonanceSchema = new mongoose.Schema(
       required: [true, "Le total de l'ordonnance est requis"],
       min: [0, 'Le total doit être positif'],
     },
+    ordonnanceDate:{
+      type: Date,
+      require: true,
+      default: new Date()
+    },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
@@ -43,6 +53,6 @@ const ordonanceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const Ordonance = mongoose.model('Ordonance', ordonanceSchema);
+const Ordonance = mongoose.model('Ordonnance', ordonanceSchema);
 
 module.exports = Ordonance;

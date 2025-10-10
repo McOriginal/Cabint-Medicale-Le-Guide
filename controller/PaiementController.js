@@ -1,24 +1,45 @@
+const mongoose = require('mongoose');
 const Paiement = require('../models/PaiementModel');
-const Traitement = require('../models/TraitementModel');
+const PaiementHistorique = require('../models/PaiementHistoriqueModel');
 // Enregistrer un paiement
 exports.createPaiement = async (req, res) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
-    const selectedTraitement = req.body.traitement;
+    const existingOrdonnance = req.body.ordonnance;
     // Vérification si un PAIEMENT n'existe pas pour ce TRAITEMENT
     const existingPaiement = await Paiement.findOne({
-      traitement: selectedTraitement,
-    }).exec();
+      ordonnance: existingOrdonnance,
+    })
+    .session(session)
+    .exec()
 
     if (existingPaiement) {
-      return res.status(404).json({ message: 'Ce Traitement est déjà payé' });
+      await session.abortTransaction();
+      session.endSession()
+      return res.status(404).json({ message: 'Un Paiement existe déjà' });
     }
 
-    const paiement = await Paiement.create({
+    const paiement = await Paiement.create([{
       user: req.user.id,
       ...req.body,
-    });
+    }],{session});
+  
+
+await PaiementHistorique.create([{
+  amount: req.body.totalPaye,
+  user: req.user.id,
+  ...req.body,
+}], {session});
+
+await session.commitTransaction()
+session.endSession()
+
     res.status(201).json(paiement);
   } catch (err) {
+    console.log(err)
+    await session.abortTransaction();
+    session.endSession()
     res.status(400).json({ status: 'error', message: err.message });
   }
 };
@@ -52,16 +73,20 @@ exports.getAllPaiements = async (req, res) => {
     const paiements = await Paiement.find()
       // Trie par date de création, du plus récent au plus ancien
       .populate({
-        path: 'traitement',
+        path: 'ordonnance',
         populate: {
-          path: 'patient',
+          path: 'traitement',
+          populate:{path:'patient'}
+          
         },
       })
-      .populate('ordonnance')
       .populate('user')
-      .sort({ createdAt: -1 });
+      .sort({ paiementDate: -1 });
+      
+
     return res.status(200).json(paiements);
   } catch (err) {
+    console.log(err)
     res.status(400).json({ status: 'error', message: err.message });
   }
 };

@@ -13,13 +13,13 @@ router.post(
 
 // Trouvez tous les paiements
 router.get(
-  '/getAllPaiementsHistorique/:id',
+  '/getAllPaiementsHistorique',
   paiementHistoriqueController.getAllPaiementsHistorique
 );
 
 // Trouvez un paiements
 router.get(
-  '/getOnePaiementHistorique/:id',
+  '/getOnePaiementHistorique',
   paiementHistoriqueController.getPaiementHistorique
 );
 

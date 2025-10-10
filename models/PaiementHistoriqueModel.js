@@ -6,6 +6,7 @@ const paiementHistoriqueSchema = new mongoose.Schema(
     ordonnance: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Ordonnance',
+      required: true,
     },
 
     amount: {

@@ -10,6 +10,7 @@ const chambreRoute = require('./routes/ChambreRoute');
 const medicamentRoute = require('./routes/MedicamentRoute');
 const ordonnanceRoute = require('./routes/OrdonnanceRoute');
 const paiementRoute = require('./routes/PaiementRoute');
+const paiementHistoriqueRoute = require('./routes/PaiementHistoriqueRoute');
 const approvisonementsRoute = require('./routes/ApprovisonementRoute');
 const appointmentRoute = require('./routes/AppointementRoute');
 const depenseRoute = require('./routes/DepenseRoute');
@@ -64,6 +65,10 @@ app.use('/api/ordonnances', ordonnanceRoute);
 
 // Utilisation des routes Ordonnance
 app.use('/api/paiements', paiementRoute);
+
+
+// Utilisation des routes Ordonnance
+app.use('/api/paiements_historique', paiementHistoriqueRoute);
 
 // Utilisation des routes Approvisonnement
 app.use('/api/approvisonnements', approvisonementsRoute);

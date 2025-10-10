@@ -128,9 +128,7 @@ exports.getAllPaiementsHistorique = async (req, res) => {
   try {
     // Récupération des Historique de PAIEMENT dont ID COMMANDE correspond au celle sélectionné dans URL
 
-    const paiements = await PaiementHistorique.find({
-      ordonnance: req.params.id,
-    })
+    const paiements = await PaiementHistorique.find()
       .populate('user')
       .populate('ordonnance')
       .sort({ createdAt: -1 });

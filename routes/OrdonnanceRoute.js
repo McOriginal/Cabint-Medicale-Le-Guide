@@ -18,7 +18,7 @@ router.put('/updateOrdonnance/:id', ordonnanceController.updateOrdonnance);
 router.get('/getAllOrdonnances', ordonnanceController.getAllOrdonnances);
 
 //  Obtenir une Ordonnances
-router.get('/details/:id', ordonnanceController.getOneOrdonnance);
+router.get('/getOrdonnance/:id', ordonnanceController.getOneOrdonnance);
 
 //  Obtenir une Ordonnances (avec TRAITEMENT liée)
 router.get(

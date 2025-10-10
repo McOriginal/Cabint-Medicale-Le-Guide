@@ -61,9 +61,9 @@ const traitementSchema = new mongoose.Schema(
 
     // Clé de rélation Matières
     doctor: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Doctor',
+      type: String,
       required: true,
+      trim:true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

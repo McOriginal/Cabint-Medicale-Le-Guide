@@ -2,11 +2,7 @@ const mongoose = require('mongoose');
 
 const paiementSchema = new mongoose.Schema(
   {
-    totalAmount: {
-      type: Number,
-      required: true,
-      trim: true,
-    },
+   
     totalPaye: {
       type: Number,
       required: true,
@@ -29,14 +25,16 @@ const paiementSchema = new mongoose.Schema(
     },
 
     // Clé de rélation Traitement
-    traitement: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Traitement',
-    },
+    // traitement: {
+    //   type: mongoose.Schema.Types.ObjectId,
+    //   ref: 'Traitement',
+    //   required: true,
+    // },
     // Clé de rélation Patient
     ordonnance: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Ordonnance',
+      required: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

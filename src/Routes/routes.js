@@ -145,7 +145,7 @@ const authProtectedRoutes = [
   { path: '/pages-faqs', component: <FAQs /> },
   { path: '/pages-pricing', component: <Pricing /> },
 
-  // { path: '/register', component: <Register /> },
+  { path: '/register', component: <Register /> },
 ];
 
 // Routes pour les Médecins
@@ -163,7 +163,7 @@ const publicRoutes = [
   // { path: '/unauthorized', component: <Unauthorized /> },
 
   // Authentication Page
-  { path: '/register', component: <Register /> },
+  // { path: '/register', component: <Register /> },
 
   { path: '/login', component: <Login /> },
   { path: '/forgotPassword', component: <ForgetPasswordPage /> },

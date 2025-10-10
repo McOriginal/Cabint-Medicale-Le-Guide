@@ -1,6 +1,6 @@
 import logoMedical from '../../assets/images/logo.png';
 
-const hospitalName = 'Cabinet Médicale Le Guide';
+const hospitalName = 'Cabinet Médical Le Guide';
 
 const hospitalLittleName = 'Cabinet Le Guide';
 

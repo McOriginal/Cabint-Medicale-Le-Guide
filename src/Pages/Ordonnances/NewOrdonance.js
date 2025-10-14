@@ -121,6 +121,13 @@ export default function NewOrdonance() {
     );
   };
 
+  // Supprimer un produit du panier
+  const removeFromCart = (Id) => {
+    setOrdonnanceItems((prevCart) =>
+      prevCart.filter((item) => item.ordonnance._id !== Id)
+    );
+  };
+
   // Fonction pour vider les produits dans le panier
   const clearCart = () => {
     setOrdonnanceItems([]);
@@ -136,17 +143,22 @@ export default function NewOrdonance() {
   const validation = useFormik({
     enableReinitialize: true,
 
-    initialValues: {
-      protocole: '',
-    },
+    initialValues: {},
 
-    validationSchema: Yup.object({
-      protocole: Yup.string(),
-    }),
+    validationSchema: Yup.object({}),
 
     onSubmit: (values, { resetForm }) => {
       // Vérification de quantité dans le STOCK
       if (ordonnanceItems?.length === 0) return;
+
+      const hasMissingProtocole = ordonnanceItems.some(
+        (item) => !item.protocole || item.protocole.trim() === ''
+      );
+
+      if (hasMissingProtocole) {
+        errorMessageAlert('Veuillez saisir le protocole de médicament.');
+        return;
+      }
 
       setIsSubmitting(true);
       const payload = {
@@ -196,31 +208,33 @@ export default function NewOrdonance() {
             {/* ------------------------------------------------------------- */}
             {/* --------------------- Panier---------------------------------------- */}
 
-            <Col sm={12} style={{ height: '350px', overflowY: 'scroll' }}>
-              {isSubmitting && <LoadingSpiner />}
+            <Col sm={12}>
+              <div>
+                {isSubmitting && <LoadingSpiner />}
 
-              {ordonnanceItems?.length > 0 && !isSubmitting && (
-                <div className='d-flex gap-4 mb-3'>
-                  <Button
-                    color='warning'
-                    className='fw-bold'
-                    onClick={clearCart}
-                  >
-                    <i className=' fas fa-window-close'></i>
-                  </Button>
-
-                  <div className='d-grid' style={{ width: '100%' }}>
+                {ordonnanceItems?.length > 0 && !isSubmitting && (
+                  <div className='d-flex gap-4 mb-3'>
                     <Button
-                      color='primary'
+                      color='warning'
                       className='fw-bold'
-                      onClick={() => validation.handleSubmit()}
+                      onClick={clearCart}
                     >
-                      Valide
+                      <i className=' fas fa-window-close'></i>
                     </Button>
+
+                    <div className='d-grid' style={{ width: '100%' }}>
+                      <Button
+                        color='primary'
+                        className='fw-bold'
+                        onClick={() => validation.handleSubmit()}
+                      >
+                        Enregistrer
+                      </Button>
+                    </div>
                   </div>
-                </div>
-              )}
-              <Card>
+                )}
+              </div>
+              <Card style={{ height: '350px', overflowY: 'scroll' }}>
                 <CardBody>
                   <CardTitle className='mb-4'>
                     <div className='d-flex justify-content-between align-items-center'>
@@ -269,83 +283,77 @@ export default function NewOrdonance() {
                         </div>
                       </div>
                       <div>
-                        <FormGroup>
-                          <Label for='protocole'>Protocole </Label>
-                          <Input
-                            name='protocole'
-                            id='protocole'
-                            type='text'
-                            className='form border-1 border-secondary form-control'
-                            placeholder='Protocole de médicament'
-                            onChange={(e) => {
-                              const newProtocole = e.target.value || '';
-                              setOrdonnanceItems((prevCart) =>
-                                prevCart.map((i) =>
-                                  i.ordonnance._id === item.ordonnance._id
-                                    ? { ...i, protocole: newProtocole }
-                                    : i
-                                )
-                              );
-                            }}
-                            onBlur={validation.handleBlur}
-                            value={item.protocole || ''}
-                            invalid={
-                              validation.touched.protocole &&
-                              validation.errors.protocole
-                                ? true
-                                : false
-                            }
-                          />
-                          {validation.touched.protocole &&
-                          validation.errors.protocole ? (
-                            <FormFeedback type='invalid'>
-                              {validation.errors.protocole}
-                            </FormFeedback>
-                          ) : null}
-                        </FormGroup>
+                        <Label for='protocole'>Protocole </Label>
+                        <Input
+                          name='protocole'
+                          id='protocole'
+                          type='text'
+                          className='form border-1 border-secondary form-control'
+                          placeholder='Protocole de médicament'
+                          onChange={(e) => {
+                            const newProtocole = e.target.value || '';
+                            setOrdonnanceItems((prevCart) =>
+                              prevCart.map((i) =>
+                                i.ordonnance._id === item.ordonnance._id
+                                  ? { ...i, protocole: newProtocole }
+                                  : i
+                              )
+                            );
+                          }}
+                        />
                       </div>
-                      <div className='d-flex gap-2'>
+                      <div className='d-flex flex-column justify-content-center align-items-center gap-2'>
+                        <div className='d-flex gap-2'>
+                          <Button
+                            color='danger'
+                            size='sm'
+                            onClick={() =>
+                              decreaseQuantity(item?.ordonnance?._id)
+                            }
+                          >
+                            -
+                          </Button>
+                          <input
+                            type='number'
+                            min={1}
+                            value={item.quantity}
+                            onClick={(e) => e.stopPropagation()} // Évite le clic sur la carte
+                            onChange={(e) => {
+                              const value = parseInt(e.target.value, 10);
+                              if (!isNaN(value) && value > 0) {
+                                setOrdonnanceItems((prevCart) =>
+                                  prevCart.map((i) =>
+                                    i.ordonnance._id === item.ordonnance._id
+                                      ? { ...i, quantity: value }
+                                      : i
+                                  )
+                                );
+                              }
+                            }}
+                            style={{
+                              width: '60px',
+                              textAlign: 'center',
+                              border: '1px solid orange',
+                              borderRadius: '5px',
+                            }}
+                          />
+                          <Button
+                            color='success'
+                            size='sm'
+                            onClick={() =>
+                              increaseQuantity(item?.ordonnance?._id)
+                            }
+                          >
+                            +
+                          </Button>
+                        </div>
+                        {/* supprimer */}
                         <Button
                           color='danger'
                           size='sm'
-                          onClick={() =>
-                            decreaseQuantity(item?.ordonnance?._id)
-                          }
+                          onClick={() => removeFromCart(item.ordonnance?._id)}
                         >
-                          -
-                        </Button>
-                        <input
-                          type='number'
-                          min={1}
-                          value={item.quantity}
-                          onClick={(e) => e.stopPropagation()} // Évite le clic sur la carte
-                          onChange={(e) => {
-                            const value = parseInt(e.target.value, 10);
-                            if (!isNaN(value) && value > 0) {
-                              setOrdonnanceItems((prevCart) =>
-                                prevCart.map((i) =>
-                                  i.ordonnance._id === item.ordonnance._id
-                                    ? { ...i, quantity: value }
-                                    : i
-                                )
-                              );
-                            }
-                          }}
-                          style={{
-                            width: '60px',
-                            textAlign: 'center',
-                            border: '1px solid orange',
-                            borderRadius: '5px',
-                          }}
-                        />
-                        <Button
-                          color='success'
-                          size='sm'
-                          onClick={() =>
-                            increaseQuantity(item?.ordonnance?._id)
-                          }
-                        >
-                          +
+                          <i className='fas fa-trash-alt'></i>
                         </Button>
                       </div>
                     </div>

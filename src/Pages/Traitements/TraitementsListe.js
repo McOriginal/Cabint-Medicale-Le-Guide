@@ -236,15 +236,13 @@ export default function TraitementsListe() {
                       <th scope='col' style={{ width: '40px' }}>
                         Date
                       </th>
-                      <th data-sort='patient_name'>Patient</th>
-                      <th data-sort='age'>Age</th>
-                      <th data-sort='phone'>Téléphone</th>
-                      <th data-sort='traitement'>Traitement</th>
+                      <th>Patient</th>
+                      <th>Age</th>
+                      <th>Téléphone</th>
+                      <th>Traitement</th>
 
-                      <th data-sort='date'>Début Maladie</th>
-                      {connectedUserRole === 'admin' && (
-                        <th data-sort='action'>Action</th>
-                      )}
+                      <th>Début Maladie</th>
+                      {connectedUserRole === 'admin' && <th>Action</th>}
                     </tr>
                   </thead>
                   <tbody className='list form-check-all text-center'>

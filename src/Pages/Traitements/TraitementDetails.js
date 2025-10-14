@@ -472,28 +472,28 @@ export default function TraitementDetails() {
                           <CardText>
                             <strong> Nom et Prénom:</strong>{' '}
                             {capitalizeWords(
-                              traitementsDetails?.doctor['firstName']
+                              traitementsDetails?.doctor?.firstName
                             )}{' '}
                             {capitalizeWords(
-                              traitementsDetails?.doctor['lastName']
+                              traitementsDetails?.doctor?.lastName
                             )}
                           </CardText>
                           <CardText>
                             <strong> Sexe:</strong>{' '}
                             {capitalizeWords(
-                              traitementsDetails?.doctor['gender']
+                              traitementsDetails?.doctor?.gender
                             )}
                           </CardText>
                           <CardText>
                             <strong> Spécialité:</strong>{' '}
                             {capitalizeWords(
-                              traitementsDetails?.doctor['speciality']
+                              traitementsDetails?.doctor?.speciality
                             )}
                           </CardText>
                           <CardText>
                             <strong> Téléphone:</strong>{' '}
                             {formatPhoneNumber(
-                              traitementsDetails?.doctor['phoneNumber']
+                              traitementsDetails?.doctor?.phoneNumber
                             )}
                           </CardText>
                         </div>

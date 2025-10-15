@@ -7,7 +7,6 @@ import {
   CardHeader,
   CardImg,
   CardText,
-  CardTitle,
   Container,
 } from 'reactstrap';
 import {
@@ -15,8 +14,10 @@ import {
   formatPrice,
 } from '../../components/capitalizeFunction';
 import {
+  bgLogo,
   hospitalAdresse,
-  hospitalName,
+  hospitalLittleName,
+  hospitalOwnerName,
   hospitalTel,
   logoMedical,
 } from '../../CompanyInfo/CompanyInfo';
@@ -100,35 +101,48 @@ export default function DetailsOrdonnance() {
                   minHeight: '500px',
                   margin: '20px auto',
                   position: 'relative',
+
+                  // background: 'rgba(1, 61, 120, 0.1)',
                 }}
+                className='text-info'
               >
-                <CardBody>
-                  <CardHeader
-                    style={{ background: 'rgba(100, 169, 238, 0.5)' }}
-                  >
+                <CardBody className='text-info'>
+                  <CardHeader>
                     <CardImg
                       src={logoMedical}
                       style={{
-                        width: '70px',
+                        width: '100px',
                         position: 'absolute',
                         top: '30px',
                         left: '10px',
                       }}
                     />
-                    <CardTitle className='text-center '>
-                      <h2>{hospitalName} </h2>
-                      <p style={{ margin: '15px', fontSize: '10px' }}>
-                        {hospitalAdresse}
+                    <div className='text-center text-info fw-bold '>
+                      <h2 className='text-info fw-bold'>CABINET MEDICAL </h2>
+                      <h2 className='text-info fw-bold'>
+                        "{hospitalLittleName}"{' '}
+                      </h2>
+                      <p
+                        style={{
+                          margin: '5px',
+                          fontSize: '12px',
+                          fontWeight: 'bold',
+                        }}
+                      >
+                        {hospitalOwnerName}
                       </p>
-                      <p style={{ margin: '15px', fontSize: '10px' }}>
+                      <p style={{ margin: '5px', fontSize: '10px' }}>
                         {hospitalTel}
                       </p>
-                    </CardTitle>
+                      <p style={{ margin: '5px', fontSize: '10px' }}>
+                        {hospitalAdresse}
+                      </p>
+                    </div>
 
                     <CardImg
                       src={logoMedical}
                       style={{
-                        width: '70px',
+                        width: '100px',
                         position: 'absolute',
                         top: '30px',
                         right: '10px',
@@ -137,21 +151,21 @@ export default function DetailsOrdonnance() {
                   </CardHeader>
 
                   <div className='d-flex justify-content-between align-items-center my-3 '>
-                    <div>
-                      <p>
+                    <div className='font-size-12'>
+                      <p className='my-1'>
                         <strong> Nom:</strong>{' '}
                         {capitalizeWords(
                           selectedOrdonnanceData?.traitements?.patient
                             ?.firstName
                         )}{' '}
                       </p>
-                      <p>
+                      <p className='my-1'>
                         <strong> Prénom:</strong>{' '}
                         {capitalizeWords(
                           selectedOrdonnanceData?.traitements?.patient?.lastName
                         )}
                       </p>
-                      <p>
+                      <p className='my-1'>
                         <strong> Prescirpteur:</strong>{' '}
                         {capitalizeWords(
                           selectedOrdonnanceData?.traitements?.doctor
@@ -162,14 +176,14 @@ export default function DetailsOrdonnance() {
                         )}
                       </p>
                     </div>
-                    <div>
-                      <p>
+                    <div className='font-size-12'>
+                      <p className='my-1'>
                         <strong> Date:</strong>{' '}
                         {new Date(
                           selectedOrdonnanceData?.ordonnances?.ordonnanceDate
                         ).toLocaleDateString('fr-Fr')}
                       </p>
-                      <p className='d-flex justify-content-between align-items-center gap-3 '>
+                      <p className='d-flex justify-content-between align-items-center gap-3 my-1 '>
                         <span>
                           <strong>Sexe: </strong>{' '}
                           {capitalizeWords(
@@ -182,7 +196,7 @@ export default function DetailsOrdonnance() {
                           {selectedOrdonnanceData?.traitements?.patient?.age}
                         </span>
                       </p>
-                      <p className='d-flex justify-content-between align-items-center gap-3 '>
+                      <p className='d-flex justify-content-between align-items-center gap-3 my-1 '>
                         <span>
                           <strong>Taille: </strong>{' '}
                           {selectedOrdonnanceData?.traitements?.height ||
@@ -194,7 +208,7 @@ export default function DetailsOrdonnance() {
                           {selectedOrdonnanceData?.traitements?.width || '----'}
                         </span>
                       </p>
-                      <p className='d-flex justify-content-between align-items-center gap-3 '>
+                      <p className='d-flex justify-content-between align-items-center gap-3 my-1 '>
                         <span>
                           <strong>TA: </strong>{' '}
                           {selectedOrdonnanceData?.traitements?.tension ||
@@ -210,10 +224,24 @@ export default function DetailsOrdonnance() {
                     </div>
                   </div>
 
-                  <div className='my-3'>
-                    <CardText className='d-flex justify-content-center align-items-center fs-5'>
+                  <div className='my-3 position-relative'>
+                    <img
+                      src={bgLogo}
+                      width={200}
+                      style={{
+                        position: 'absolute',
+                        top: '10%',
+                        left: '30%',
+                        opacity: '0.3',
+                      }}
+                      alt='Logo'
+                    />
+                    <p
+                      className='d-flex justify-content-center align-items-center fs-4 fw-bold my-2'
+                      style={{ background: 'rgba(5, 47, 254, 0.22)' }}
+                    >
                       <strong> Ordonnance:</strong>
-                    </CardText>
+                    </p>
                     <ul className='list-unstyled'>
                       {selectedOrdonnanceData?.ordonnances?.items?.map(
                         (item, index) => (

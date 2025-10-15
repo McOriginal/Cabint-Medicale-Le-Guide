@@ -17,7 +17,11 @@ import {
 import * as Yup from 'yup';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
 import LoadingSpiner from '../components/LoadingSpiner';
-import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
+import {
+  capitalizeWords,
+  formatPrice,
+  RequiredFormField,
+} from '../components/capitalizeFunction';
 import { useAllMedicament } from '../../Api/queriesMedicament';
 import {
   useOneOrdonnance,
@@ -156,9 +160,17 @@ export default function UpdateOrdonance() {
   const validation = useFormik({
     enableReinitialize: true,
 
-    initialValues: {},
+    initialValues: {
+      ordonnanceDate: selectedOrdonnance
+        ? selectedOrdonnance?.ordonnances?.ordonnanceDate?.slice(0, 10)
+        : new Date().toISOString().slice(0, 10),
+    },
 
-    validationSchema: Yup.object({}),
+    validationSchema: Yup.object({
+      ordonnanceDate: Yup.date().required(
+        "La date de l'Ordonnance est obligatoire."
+      ),
+    }),
 
     onSubmit: (values, { resetForm }) => {
       // Vérification de quantité dans le STOCK
@@ -182,7 +194,8 @@ export default function UpdateOrdonance() {
           protocole: item.protocole,
         })),
         totalAmount,
-        traitement: selectedOrdonnance?.traitement, // ou autre choix si tu ajoutes un select
+        traitement: selectedOrdonnance?.traitement,
+        ordonnanceDate: values.ordonnanceDate,
       };
       // Appel de l'API pour ajouter la COMMANDE
       updateOrdonnance(
@@ -255,6 +268,38 @@ export default function UpdateOrdonance() {
                 <CardBody>
                   <CardTitle className='mb-4'>
                     <div className='d-flex justify-content-between align-items-center'>
+                      {/* Date de l'Ordonnance */}
+                      <div>
+                        <FormGroup className='mb-3'>
+                          <Label className='form-label' for='ordonnanceDate'>
+                            Date de l'Ordonnance <RequiredFormField />
+                          </Label>
+                          <Input
+                            name='ordonnanceDate'
+                            id='ordonnanceDate'
+                            type='date'
+                            className='form border-1 border-dark form-control'
+                            placeholder="Date de l'Ordonnance"
+                            max={new Date().toISOString().slice(0, 10)}
+                            onChange={validation.handleChange}
+                            onBlur={validation.handleBlur}
+                            value={validation.values.ordonnanceDate || ''}
+                            invalid={
+                              validation.touched.ordonnanceDate &&
+                              validation.errors.ordonnanceDate
+                                ? true
+                                : false
+                            }
+                          />
+                          {validation.touched.ordonnanceDate &&
+                          validation.errors.ordonnanceDate ? (
+                            <FormFeedback type='invalid'>
+                              {validation.errors.ordonnanceDate}
+                            </FormFeedback>
+                          ) : null}
+                        </FormGroup>
+                      </div>
+
                       <h6>Ordonnance Patient</h6>
                       <h5 className='text-warning'>
                         Total : {formatPrice(totalAmount)} F

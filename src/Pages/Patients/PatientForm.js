@@ -18,6 +18,7 @@ import {
 import LoadingSpiner from '../components/LoadingSpiner';
 import { useCreatePatient, useUpdatePatient } from '../../Api/queriesPatient';
 import { useNavigate } from 'react-router-dom';
+import { RequiredFormField } from '../components/capitalizeFunction';
 
 const PatientForm = ({ patientToEdit, tog_form_modal }) => {
   // Patient Query pour créer un etudiant
@@ -40,7 +41,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
       lastName: patientToEdit?.lastName || '',
       age: patientToEdit?.age || '',
       gender: patientToEdit?.gender || '',
-      phoneNumber: patientToEdit?.phoneNumber || undefined,
+      phoneNumber: patientToEdit?.phoneNumber || '',
       adresse: patientToEdit?.adresse || '',
       groupeSanguin: patientToEdit?.groupeSanguin || '',
       ethnie: patientToEdit?.ethnie || '',
@@ -57,15 +58,10 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
       gender: Yup.string().required('Ce champ est obligatoire'),
       age: Yup.string().required('Ce champ est obligatoire'),
       phoneNumber: Yup.number(),
-      groupeSanguin: Yup.string().required('Ce champ est obligatoire'),
-      ethnie: Yup.string(),
-      profession: Yup.string().matches(
-        /^[a-z0-9À-ÿ\s]+$/i,
-        'Veillez Entrez une valeur correct !'
-      ),
-      adresse: Yup.string()
-        .matches(/^[a-z0-9À-ÿ\s]+$/i, 'Veillez Entrez une valeur correct !')
-        .required('Ce champ est obligatoire'),
+      groupeSanguin: Yup.string(),
+      ethnie: Yup.string().required('Ce champ est obligatoire'),
+      profession: Yup.string(),
+      adresse: Yup.string(),
     }),
 
     onSubmit: (values, { resetForm }) => {
@@ -81,7 +77,7 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
           { id: patientToEdit._id, data: patientDataLoaded },
           {
             onSuccess: () => {
-              successMessageAlert('Données mise à jour avec succès');
+              successMessageAlert('Mise à jour avec succès');
               setisLoading(false);
               tog_form_modal();
             },
@@ -133,12 +129,14 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
       <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='firstName'>Nom</Label>
+            <Label htmlFor='firstName'>
+              Nom <RequiredFormField />{' '}
+            </Label>
             <Input
               name='firstName'
               placeholder='Entrez un nom...'
               type='text'
-              className='border border-secondary form-control'
+              className='border border-secondary form-control border-1 border-dark'
               id='firstName'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -158,12 +156,14 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
         </Col>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='lastName'>Prénom</Label>
+            <Label htmlFor='lastName'>
+              Prénom <RequiredFormField />
+            </Label>
             <Input
               name='lastName'
               placeholder='Entrez un prénom...'
               type='text'
-              className='border border-secondary form-control'
+              className='border border-secondary form-control border-1 border-dark'
               id='lastName'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -185,13 +185,15 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
       <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='gender'>Genre</Label>
+            <Label htmlFor='gender'>
+              Genre <RequiredFormField />
+            </Label>
 
             <Input
               name='gender'
               placeholder='Sélectionner le Genre...'
               type='select'
-              className='border border-secondary form-control'
+              className='border border-secondary form-control border-1 border-dark'
               id='gender'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -220,17 +222,11 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
             <Input
               name='groupeSanguin'
               type='select'
-              className='border border-secondary form-control'
+              className='border border-secondary form-control border-1 border-dark'
               id='groupeSanguin'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.groupeSanguin || ''}
-              invalid={
-                validation.touched.groupeSanguin &&
-                validation.errors.groupeSanguin
-                  ? true
-                  : false
-              }
             >
               <option value=''>Sélectionner le Groupe Sanguin</option>
               <option value='a+'>A+</option>
@@ -241,26 +237,21 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               <option value='ab-'>AB-</option>
               <option value='o+'>O+</option>
               <option value='o-'>O-</option>
-              <option value='non définis'>Non Définis</option>
             </Input>
-            {validation.touched.groupeSanguin &&
-            validation.errors.groupeSanguin ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.groupeSanguin}
-              </FormFeedback>
-            ) : null}
           </FormGroup>
         </Col>
       </Row>
       <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='age'>Age</Label>
+            <Label htmlFor='age'>
+              Age <RequiredFormField />
+            </Label>
             <Input
               name='age'
               type='text'
               placeholder='Ex: 33ans ; 8 mois ; 6 semaines ; 2 jours...'
-              className='border border-secondary form-control'
+              className='border border-secondary form-control border-1 border-dark'
               id='age'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -283,21 +274,11 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='adresse'
               placeholder='Kabala...'
               type='text'
-              className='border border-secondary  form-control'
+              className='border border-secondary  form-control border-1 border-dark'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.adresse || ''}
-              invalid={
-                validation.touched.adresse && validation.errors.adresse
-                  ? true
-                  : false
-              }
             />
-            {validation.touched.adresse && validation.errors.adresse ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.adresse}
-              </FormFeedback>
-            ) : null}
           </FormGroup>
         </Col>
       </Row>
@@ -310,32 +291,43 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               name='phoneNumber'
               placeholder='70 00 00 00'
               type='number'
-              className='border border-secondary form-control'
+              className='border border-secondary form-control border-1 border-dark'
               id='phoneNumber'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.phoneNumber || ''}
-              invalid={
-                validation.touched.phoneNumber && validation.errors.phoneNumber
-                  ? true
-                  : false
-              }
             />
-            {validation.touched.phoneNumber && validation.errors.phoneNumber ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.phoneNumber}
-              </FormFeedback>
-            ) : null}
           </FormGroup>
         </Col>
+
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='ethnie'>Ethnie</Label>
+            <Label htmlFor='profession'>Profession</Label>
+            <Input
+              name='profession'
+              placeholder='Elève; Maçon; Femme de Menage.....'
+              type='text'
+              className='border border-secondary form-control border-1 border-dark'
+              id='profession'
+              onChange={validation.handleChange}
+              onBlur={validation.handleBlur}
+              value={validation.values.profession || ''}
+            />
+          </FormGroup>
+        </Col>
+      </Row>
+
+      <Row>
+        <Col md='12'>
+          <FormGroup className='mb-3'>
+            <Label htmlFor='ethnie'>
+              Ethnie <RequiredFormField />
+            </Label>
             <Input
               type='select'
               name='ethnie'
               id='ethnie'
-              className='border border-secondary form-control'
+              className='border border-secondary form-control border-1 border-dark'
               value={
                 validation.values.ethnie &&
                 ![
@@ -411,7 +403,8 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
                 name='ethnie'
                 type='text'
                 id='ethnieAutre'
-                className='border border-secondary  form-control'
+                className='border border-secondary form-control border-1 border-dark'
+                placeholder='Entrez une ethnie...'
                 value={validation.values.ethnie}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
@@ -424,33 +417,6 @@ const PatientForm = ({ patientToEdit, tog_form_modal }) => {
               )}
             </FormGroup>
           )}
-        </Col>
-      </Row>
-      <Row>
-        <Col md='12'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='profession'>Profession</Label>
-            <Input
-              name='profession'
-              placeholder='Elève; Maçon; Femme de Menage.....'
-              type='text'
-              className='border border-secondary form-control'
-              id='profession'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.profession || ''}
-              invalid={
-                validation.touched.profession && validation.errors.profession
-                  ? true
-                  : false
-              }
-            />
-            {validation.touched.profession && validation.errors.profession ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.profession}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
         </Col>
       </Row>
 

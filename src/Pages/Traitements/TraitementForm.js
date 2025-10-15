@@ -24,7 +24,11 @@ import {
 } from '../components/AlerteModal';
 import { useAllPatients } from '../../Api/queriesPatient';
 import LoadingSpiner from '../components/LoadingSpiner';
-import { capitalizeWords } from '../components/capitalizeFunction';
+import {
+  capitalizeWords,
+  formatPhoneNumber,
+  RequiredFormField,
+} from '../components/capitalizeFunction';
 import { useAllDoctors } from '../../Api/queriesDoctors';
 
 const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
@@ -73,6 +77,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
       startTime: traitementToEdit?.startTime || '',
       height: traitementToEdit?.height || '',
       width: traitementToEdit?.width || '',
+      temperature: traitementToEdit?.temperature || '',
+      tension: traitementToEdit?.tension || '',
+      traitDate: traitementToEdit?.tratDate?.substring(0, 10) || '',
       nc: traitementToEdit?.nc || '',
       ac: traitementToEdit?.ac || '',
       asc: traitementToEdit?.asc || '',
@@ -93,16 +100,21 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
       startTime: Yup.string().required(
         'Vous devez entrez une valeur dans de champ'
       ),
+      traitDate: Yup.date().required(
+        'Vous devez entrez une valeur dans de champ'
+      ),
       doctor: Yup.string().required(
         'Vous devez entrez une valeur dans de champ'
       ),
       height: Yup.number().typeError('La taille doit être un nombre'),
       width: Yup.number().typeError('Le poids doit être un nombre'),
+      temperature: Yup.string().typeError('Le poids doit être un nombre'),
+      tension: Yup.string().typeError('Le poids doit être un nombre'),
       nc: Yup.string().typeError('Le NC doit être un texte'),
       ac: Yup.string().typeError('L’AC doit être un texte'),
       asc: Yup.string().typeError('L’ASC doit être un texte'),
       diagnostic: Yup.string().typeError('Le diagnostic doit être un texte'),
-      result: Yup.string().typeError('Le résultat doit être un texte'),
+      result: Yup.string().required('Ce champ est obligatoire'),
       observation: Yup.string().typeError('L’observation doit être un texte'),
       totalAmount: Yup.number().required('Le montant total est obligatoire'),
       // Le reste est optionnel
@@ -248,7 +260,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
         >
           <TabPane tabId={1}>
             <FormGroup>
-              <Label htmlFor='patient'>Patient</Label>
+              <Label htmlFor='patient'>
+                Patient <RequiredFormField />
+              </Label>
               <Input
                 type='select'
                 name='patient'
@@ -286,7 +300,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               ) : null}
             </FormGroup>
             <FormGroup>
-              <Label htmlFor='motif'>Motif</Label>
+              <Label htmlFor='motif'>
+                Motif <RequiredFormField />
+              </Label>
               <Input
                 type='text'
                 name='motif'
@@ -305,7 +321,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               ) : null}
             </FormGroup>
             <FormGroup>
-              <Label htmlFor='startDate'>Début Maladie</Label>
+              <Label htmlFor='startDate'>
+                Début Maladie <RequiredFormField />
+              </Label>
               <Input
                 type='date'
                 name='startDate'
@@ -326,7 +344,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               ) : null}
             </FormGroup>
             <FormGroup>
-              <Label htmlFor='startTime'>Période du jour</Label>
+              <Label htmlFor='startTime'>
+                Période du jour <RequiredFormField />
+              </Label>
               <Input
                 type='select'
                 name='startTime'
@@ -373,6 +393,32 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
                 className='border border-secondary form-control'
                 placeholder='Poids de Patient en kg'
                 value={validation.values.width}
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor='width'>Temperature </Label>
+              <Input
+                type='text'
+                name='temperature'
+                id='temperature'
+                className='border border-secondary form-control'
+                placeholder='Temperature du Patient'
+                value={validation.values.temperature}
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor='width'>Tension Artérielle</Label>
+              <Input
+                type='text'
+                name='tension'
+                id='tension'
+                className='border border-secondary form-control'
+                placeholder='Poids de Patient en kg'
+                value={validation.values.tension}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
               />
@@ -432,7 +478,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor='result'>Résultat</Label>
+              <Label htmlFor='result'>
+                Résultat <RequiredFormField />
+              </Label>
               <Input
                 type='textarea'
                 name='result'
@@ -442,7 +490,15 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
                 value={validation.values.result}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
+                invalid={
+                  validation.touched.result && !!validation.errors.result
+                }
               />
+              {validation.touched.result && validation.errors.result ? (
+                <FormFeedback type='invalid'>
+                  {validation.errors.result}
+                </FormFeedback>
+              ) : null}
             </FormGroup>
             <FormGroup>
               <Label htmlFor='observation'>Observation</Label>
@@ -458,7 +514,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
               />
             </FormGroup>
             <FormGroup>
-              <Label htmlFor='medecin'>Médecin</Label>
+              <Label htmlFor='medecin'>
+                Médecin Traitant <RequiredFormField />
+              </Label>
               <Input
                 type='select'
                 name='doctor'
@@ -467,6 +525,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
                 value={validation.values.doctor}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
+                invalid={
+                  validation.touched.doctor && !!validation.errors.doctor
+                }
               >
                 {patientLoading && <LoadingSpiner />}
                 {patientError && (
@@ -480,7 +541,7 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
                     <option key={doc._id} value={doc._id}>
                       {capitalizeWords(doc.firstName)} {' - '}
                       {capitalizeWords(doc.lastName)} {' - '}
-                      {new Date(doc.dateOfBirth).toLocaleDateString()}
+                      {formatPhoneNumber(doc.phoneNumber)}
                     </option>
                   ))}
               </Input>
@@ -493,7 +554,9 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
           </TabPane>
           <TabPane tabId={4}>
             <FormGroup>
-              <Label htmlFor='totalAmount'>Montant total </Label>
+              <Label htmlFor='totalAmount'>
+                Montant total <RequiredFormField />{' '}
+              </Label>
               <p className='text-mutate'>
                 Frais de Traitement,{' '}
                 <span className='text-info'>sans Ordonnances</span>{' '}
@@ -507,11 +570,38 @@ const TraitementForm = ({ traitementToEdit, tog_form_modal }) => {
                 value={validation.values.totalAmount || ''}
                 onChange={validation.handleChange}
                 onBlur={validation.handleBlur}
+                invalid={
+                  validation.touched.totalAmount &&
+                  !!validation.errors.totalAmount
+                }
               />
               {validation.touched.totalAmount &&
               validation.errors.totalAmount ? (
                 <FormFeedback type='invalid'>
                   {validation.errors.totalAmount}
+                </FormFeedback>
+              ) : null}
+            </FormGroup>
+            <FormGroup>
+              <Label htmlFor='traitDate'>
+                Date de Traitement <RequiredFormField />
+              </Label>
+              <Input
+                type='date'
+                name='traitDate'
+                id='traitDate'
+                className='border border-secondary form-control'
+                max={new Date().toISOString().split('T')[0]}
+                value={validation.values.traitDate || ''}
+                onChange={validation.handleChange}
+                onBlur={validation.handleBlur}
+                invalid={
+                  validation.touched.traitDate && !!validation.errors.traitDate
+                }
+              />
+              {validation.touched.traitDate && validation.errors.traitDate ? (
+                <FormFeedback type='invalid'>
+                  {validation.errors.traitDate}
                 </FormFeedback>
               ) : null}
             </FormGroup>

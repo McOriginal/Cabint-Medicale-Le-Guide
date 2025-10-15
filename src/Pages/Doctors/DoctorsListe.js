@@ -32,8 +32,7 @@ export default function DoctorsListe() {
       (doctor?.emailAdresse || '').toLowerCase().includes(search) ||
       doctor?.speciality.toLowerCase().includes(search) ||
       (doctor?.phoneNumber || '').toString().includes(search) ||
-      (doctor?.guardDays || '').toLowerCase().includes(search) ||
-      (doctor?.statut || '').toLowerCase().includes(search)
+      (doctor?.guardDays || '').toLowerCase().includes(search)
     );
   });
 
@@ -128,32 +127,24 @@ export default function DoctorsListe() {
                             id='customerTable'
                           >
                             <thead className='table-light'>
-                              <tr>
-                                <th scope='col' style={{ width: '50px' }}>
-                                  ID
-                                </th>
-                                <th data-sort='customer_name'>Nom</th>
-                                <th data-sort='email'>Prénom</th>
-                                <th data-sort='genre'>Genre</th>
-                                <th data-sort='statut'>Statut</th>
-                                <th data-sort='salaire'>Salaire</th>
-                                <th data-sort='guardDays'>J-Services</th>
-                                <th data-sort='speciality'>Spécialité</th>
-                                <th data-sort='email'>Adresse Email</th>
-                                <th data-sort='date'>Date de naissance</th>
+                              <tr className='text-center'>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Genre</th>
+                                <th>J-Services</th>
+                                <th>Spécialité</th>
+                                <th>Adresse Email</th>
 
-                                <th data-sort='adresse'>Domicile</th>
-                                <th data-sort='phone'>Téléphone</th>
-                                <th data-sort='action'>Action</th>
+                                <th>Domicile</th>
+                                <th>Téléphone</th>
+                                <th>Action</th>
                               </tr>
                             </thead>
 
                             <tbody className='list form-check-all text-center'>
                               {filterSearchData?.length > 0 &&
-                                filterSearchData?.map((doctor, index) => (
-                                  <tr key={doctor?._id}>
-                                    <th scope='row'>{index + 1}</th>
-
+                                filterSearchData?.map((doctor) => (
+                                  <tr key={doctor?._id} className='text-center'>
                                     <td>
                                       {capitalizeWords(doctor?.firstName)}{' '}
                                     </td>
@@ -161,12 +152,6 @@ export default function DoctorsListe() {
                                       {capitalizeWords(doctor?.lastName)}{' '}
                                     </td>
                                     <td>{capitalizeWords(doctor?.gender)} </td>
-                                    <td>{capitalizeWords(doctor?.statut)} </td>
-                                    <td>
-                                      {doctor?.salaire
-                                        ? formatPrice(doctor?.salaire) + ' F'
-                                        : '----'}{' '}
-                                    </td>
                                     <td>
                                       {doctor?.guardDays
                                         ? capitalizeWords(doctor?.guardDays)
@@ -175,13 +160,7 @@ export default function DoctorsListe() {
                                     <td>
                                       {capitalizeWords(doctor?.speciality)}{' '}
                                     </td>
-                                    <td>{doctor?.emailAdresse} </td>
-
-                                    <td>
-                                      {new Date(
-                                        doctor?.dateOfBirth
-                                      ).toLocaleDateString()}{' '}
-                                    </td>
+                                    <td>{doctor?.emailAdresse || '-----'} </td>
 
                                     <td>{capitalizeWords(doctor?.adresse)} </td>
                                     <td>

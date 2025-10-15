@@ -97,7 +97,7 @@ export default function DetailsOrdonnance() {
                   boxShadow: '0px 0px 10px rgba(100, 169, 238, 0.5)',
                   borderRadius: '15px',
                   width: '583px',
-                  // height: '827px',
+                  minHeight: '500px',
                   margin: '20px auto',
                   position: 'relative',
                 }}
@@ -116,8 +116,7 @@ export default function DetailsOrdonnance() {
                       }}
                     />
                     <CardTitle className='text-center '>
-                      <h2 className='fs-bold'>Ordonnance Médical </h2>
-                      <h5>{hospitalName} </h5>
+                      <h2>{hospitalName} </h2>
                       <p style={{ margin: '15px', fontSize: '10px' }}>
                         {hospitalAdresse}
                       </p>
@@ -125,12 +124,7 @@ export default function DetailsOrdonnance() {
                         {hospitalTel}
                       </p>
                     </CardTitle>
-                    <CardText>
-                      <strong> Date d'Ordonnance:</strong>{' '}
-                      {new Date(
-                        selectedOrdonnanceData?.createdAt
-                      ).toLocaleDateString()}
-                    </CardText>
+
                     <CardImg
                       src={logoMedical}
                       style={{
@@ -142,63 +136,110 @@ export default function DetailsOrdonnance() {
                     />
                   </CardHeader>
 
-                  <div
-                    sm='12'
-                    className='my-2 px-2 border border-top border-info rounded rounded-md'
-                  >
-                    <CardText>
-                      <strong> Nom et Prénom:</strong>{' '}
-                      {capitalizeWords(
-                        selectedOrdonnanceData?.traitements?.patient?.firstName
-                      )}{' '}
-                      {capitalizeWords(
-                        selectedOrdonnanceData?.traitements?.patient?.lastName
-                      )}
-                    </CardText>
-                    <CardText>
-                      <strong> Sexe:</strong>{' '}
-                      {capitalizeWords(
-                        selectedOrdonnanceData?.traitements?.patient?.gender
-                      )}
-                    </CardText>
+                  <div className='d-flex justify-content-between align-items-center my-3 '>
+                    <div>
+                      <p>
+                        <strong> Nom:</strong>{' '}
+                        {capitalizeWords(
+                          selectedOrdonnanceData?.traitements?.patient
+                            ?.firstName
+                        )}{' '}
+                      </p>
+                      <p>
+                        <strong> Prénom:</strong>{' '}
+                        {capitalizeWords(
+                          selectedOrdonnanceData?.traitements?.patient?.lastName
+                        )}
+                      </p>
+                      <p>
+                        <strong> Prescirpteur:</strong>{' '}
+                        {capitalizeWords(
+                          selectedOrdonnanceData?.traitements?.doctor
+                            ?.firstName +
+                            ' ' +
+                            selectedOrdonnanceData?.traitements?.doctor
+                              ?.lastName
+                        )}
+                      </p>
+                    </div>
+                    <div>
+                      <p>
+                        <strong> Date:</strong>{' '}
+                        {new Date(
+                          selectedOrdonnanceData?.ordonnances?.ordonnanceDate
+                        ).toLocaleDateString('fr-Fr')}
+                      </p>
+                      <p className='d-flex justify-content-between align-items-center gap-3 '>
+                        <span>
+                          <strong>Sexe: </strong>{' '}
+                          {capitalizeWords(
+                            selectedOrdonnanceData?.traitements?.patient?.gender
+                          )}
+                        </span>
+
+                        <span>
+                          <strong>Age: </strong>
+                          {selectedOrdonnanceData?.traitements?.patient?.age}
+                        </span>
+                      </p>
+                      <p className='d-flex justify-content-between align-items-center gap-3 '>
+                        <span>
+                          <strong>Taille: </strong>{' '}
+                          {selectedOrdonnanceData?.traitements?.height ||
+                            '----'}
+                        </span>
+
+                        <span>
+                          <strong>Poids: </strong>
+                          {selectedOrdonnanceData?.traitements?.width || '----'}
+                        </span>
+                      </p>
+                      <p className='d-flex justify-content-between align-items-center gap-3 '>
+                        <span>
+                          <strong>TA: </strong>{' '}
+                          {selectedOrdonnanceData?.traitements?.tension ||
+                            '----'}
+                        </span>
+
+                        <span>
+                          <strong>T°: </strong>
+                          {selectedOrdonnanceData?.traitements?.temperature ||
+                            '----'}
+                        </span>
+                      </p>
+                    </div>
                   </div>
 
                   <div className='my-3'>
                     <CardText className='d-flex justify-content-center align-items-center fs-5'>
-                      <strong> Médicaments:</strong>
+                      <strong> Ordonnance:</strong>
                     </CardText>
                     <ul className='list-unstyled'>
                       {selectedOrdonnanceData?.ordonnances?.items?.map(
-                        (item) => (
+                        (item, index) => (
                           <li
                             key={item._id}
-                            className='border-2 border-grey border-bottom py-2'
+                            className='border-2 border-grey border-bottom text-center py-2'
                           >
-                            <strong>
-                              {formatPrice(item?.quantity)} {' => '}
-                            </strong>
-                            {capitalizeWords(item?.medicaments?.name)}
-                            <span className='mx-2'>
-                              {' '}
-                              {capitalizeWords(` ----> ${item.protocole}`)}
-                            </span>
-                            <strong className='ms-4 text-dark'>
-                              {' '}
-                              {formatPrice(
-                                item?.customerPrice || item?.medicaments?.price
-                              ) +
-                                'f x ' +
-                                item?.quantity}
-                              {' = '}
-                            </strong>
-                            <strong className='ms-4 text-primary'>
-                              {' '}
-                              {formatPrice(
-                                item?.customerPrice * item?.quantity ||
-                                  item?.medicaments?.price * item?.quantity
-                              )}{' '}
-                              F
-                            </strong>
+                            <p>
+                              <strong>{index + 1}</strong>
+                              {' : '}
+                              {capitalizeWords(item?.medicaments?.name)}
+                              <span className='mx-2'>
+                                <strong>
+                                  {' ==> '} {formatPrice(item?.quantity)}
+                                </strong>
+                              </span>
+                              <strong className='ms-4 text-primary'>
+                                {' '}
+                                {formatPrice(
+                                  item?.customerPrice * item?.quantity ||
+                                    item?.medicaments?.price * item?.quantity
+                                )}{' '}
+                                F
+                              </strong>
+                            </p>
+                            {capitalizeWords(` ----> ${item.protocole}`)}
                           </li>
                         )
                       )}

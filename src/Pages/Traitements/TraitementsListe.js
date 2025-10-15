@@ -255,7 +255,7 @@ export default function TraitementsListe() {
                           className='text-center border-secondary border-bottom'
                         >
                           <th>
-                            {new Date(trait.createdAt).toLocaleDateString()}
+                            {new Date(trait.traitDate).toLocaleDateString()}
                           </th>
                           <td>
                             {capitalizeWords(trait?.patient?.firstName)}{' '}

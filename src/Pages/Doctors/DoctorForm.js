@@ -17,6 +17,7 @@ import {
 } from '../components/AlerteModal';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { useCreateDoctor, useUpdateDoctor } from '../../Api/queriesDoctors';
+import { RequiredFormField } from '../components/capitalizeFunction';
 
 const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
   // Patient Query pour créer un etudiant
@@ -39,7 +40,6 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
       adresse: doctorToEdit?.adresse || '',
       emailAdresse: doctorToEdit?.emailAdresse || '',
       speciality: doctorToEdit?.speciality || '',
-      statut: doctorToEdit?.statut || '',
       guardDays: doctorToEdit?.guardDays || '',
     },
     validationSchema: Yup.object({
@@ -61,8 +61,7 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
         /^[a-z0-9À-ÿ\\s]+$/i,
         'Veillez Entrez une valeur correct !'
       ),
-      guardDays: Yup.string(),
-      statut: Yup.string(),
+      guardDays: Yup.string().required('Ce champ est obligatoire'),
     }),
 
     onSubmit: (values, { resetForm }) => {
@@ -127,12 +126,14 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
       <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='firstName'>Nom</Label>
+            <Label htmlFor='firstName'>
+              Nom <RequiredFormField />{' '}
+            </Label>
             <Input
               name='firstName'
               placeholder='Entrez un nom...'
               type='text'
-              className='form-control'
+              className='form-control border-1 border-dark'
               id='firstName'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -152,12 +153,14 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
         </Col>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='lastName'>Prénom</Label>
+            <Label htmlFor='lastName'>
+              Prénom <RequiredFormField />
+            </Label>
             <Input
               name='lastName'
               placeholder='Entrez un prénom...'
               type='text'
-              className='form-control'
+              className='form-control border-1 border-dark'
               id='lastName'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -179,13 +182,15 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
       <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='gender'>Genre</Label>
+            <Label htmlFor='gender'>
+              Genre <RequiredFormField />
+            </Label>
 
             <Input
               name='gender'
               placeholder='Sélectionner le Genre...'
               type='select'
-              className='form-control'
+              className='form-control border-1 border-dark'
               id='gender'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -210,12 +215,14 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
 
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='phoneNumber'>Téléphone</Label>
+            <Label htmlFor='phoneNumber'>
+              Téléphone <RequiredFormField />
+            </Label>
             <Input
               name='phoneNumber'
               placeholder='70 00 00 00'
               type='number'
-              className='form-control'
+              className='form-control border-1 border-dark'
               id='phoneNumber'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -242,35 +249,26 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
             <Input
               name='emailAdresse'
               type='mail'
-              className='form-control'
+              className='form-control border-1 border-dark'
+              placeholder='exemple@gmail.com'
               id='emailAdresse'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.emailAdresse || ''}
-              invalid={
-                validation.touched.emailAdresse &&
-                validation.errors.emailAdresse
-                  ? true
-                  : false
-              }
             />
-
-            {validation.touched.emailAdresse &&
-            validation.errors.emailAdresse ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.emailAdresse}
-              </FormFeedback>
-            ) : null}
           </FormGroup>
         </Col>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='adresse'>Adresse Domicile</Label>
+            <Label htmlFor='adresse'>
+              Adresse Domicile <RequiredFormField />
+            </Label>
             <Input
               name='adresse'
               placeholder='Kabala...'
               type='text'
-              className='form-control'
+              className='form-control border-1 border-dark'
+              id='adresse'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
               value={validation.values.adresse || ''}
@@ -290,13 +288,16 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
       </Row>
 
       <Row>
-        <Col md='12'>
+        <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='speciality'>Spécialité</Label>
+            <Label htmlFor='speciality'>
+              Spécialité <RequiredFormField />
+            </Label>
             <Input
               name='speciality'
-              type='select'
-              className='form-control'
+              type='text'
+              className='form-control border-1 border-dark'
+              placeholder='Fonction de principale...'
               id='speciality'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}
@@ -306,26 +307,8 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
                   ? true
                   : false
               }
-            >
-              <option value=''>Sélectionner un speciality</option>
-              <option value='cardiologie'>Cardiologie</option>
-              <option value="infirmier-d'etat">Infirmier d'état</option>
-              <option value='sage-femme'>Sage Femme</option>
-              <option value='dermatologie'>Dermatologie</option>
-              <option value='endocrinologie'>Endocrinologie</option>
-              <option value='gastroenterologie'>Gastroentérologie</option>
-              <option value='gynecologie'>Gynécologie</option>
-              <option value='medecinegenerale'>Médecine Générale</option>
-              <option value='neurologie'>Neurologie</option>
-              <option value='ophtalmologie'>Ophtalmologie</option>
-              <option value='orthopedie'>Orthopédie</option>
-              <option value='pediatrie'>Pédiatrie</option>
-              <option value='pneumologie'>Pneumologie</option>
-              <option value='psychiatrie'>Psychiatrie</option>
-              <option value='radiologie'>Radiologie</option>
-              <option value='rhumatologie'>Rhumatologie</option>
-              <option value='urologie'>Urologie</option>
-            </Input>
+            />
+
             {validation.touched.speciality && validation.errors.speciality ? (
               <FormFeedback type='invalid'>
                 {validation.errors.speciality}
@@ -333,45 +316,17 @@ const DoctorForm = ({ doctorToEdit, tog_form_modal }) => {
             ) : null}
           </FormGroup>
         </Col>
-      </Row>
 
-      <Row>
         <Col md='6'>
           <FormGroup className='mb-3'>
-            <Label htmlFor='statut'>Statut</Label>
-            <Input
-              name='statut'
-              type='select'
-              className='form-control'
-              id='statut'
-              onChange={validation.handleChange}
-              onBlur={validation.handleBlur}
-              value={validation.values.statut || ''}
-              invalid={
-                validation.touched.statut && validation.errors.statut
-                  ? true
-                  : false
-              }
-            >
-              <option value=''>Sélectionner un statut</option>
-              <option value='employer'>Employer</option>
-              <option value='stagiaire'>Stagiaire</option>
-              <option value='assistant'>Assistant</option>
-            </Input>
-            {validation.touched.statut && validation.errors.statut ? (
-              <FormFeedback type='invalid'>
-                {validation.errors.statut}
-              </FormFeedback>
-            ) : null}
-          </FormGroup>
-        </Col>
-        <Col md='6'>
-          <FormGroup className='mb-3'>
-            <Label htmlFor='guardDays'>Jour de Service/Garde</Label>
+            <Label htmlFor='guardDays'>
+              Jour de (Service / Garde) <RequiredFormField />
+            </Label>
             <Input
               name='guardDays'
               type='text'
-              className='form-control'
+              className='form-control border-1 border-dark'
+              placeholder='Lundi, Mardi...'
               id='guardDays'
               onChange={validation.handleChange}
               onBlur={validation.handleBlur}

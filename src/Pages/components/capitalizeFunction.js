@@ -33,3 +33,7 @@ export const formatPrice = (number) => {
 
   return str; // pour les nombres < 1000, on retourne tel quel
 };
+
+export const RequiredFormField = () => {
+  return <span className='text-danger'>*</span>;
+};

@@ -192,7 +192,6 @@ export default function OrdonnanceListe() {
                           >
                             <thead className='table-light'>
                               <tr className='text-center'>
-                                <th scope='col' style={{ width: '50px' }}></th>
                                 <th scope='col' style={{ width: '50px' }}>
                                   Date d'ordonnance
                                 </th>
@@ -222,106 +221,103 @@ export default function OrdonnanceListe() {
                             </thead>
                             <tbody className='list form-check-all text-center'>
                               {filterSearchOrdonnanceData?.length > 0 &&
-                                filterSearchOrdonnanceData?.map(
-                                  (ordo, index) => (
-                                    <tr key={ordo?._id} className='text-center'>
-                                      <th scope='row'>{index + 1}</th>
-                                      <th>
-                                        {new Date(
-                                          ordo?.createdAt
-                                        ).toLocaleDateString('fr-Fr', {
-                                          weekday: 'short',
-                                          year: 'numeric',
-                                          month: '2-digit',
-                                          day: '2-digit',
-                                        })}
-                                      </th>
-                                      <td>
-                                        {capitalizeWords(
-                                          ordo?.traitement?.patient?.firstName
-                                        )}{' '}
-                                        {capitalizeWords(
-                                          ordo?.traitement?.patient?.lastName
-                                        )}
-                                      </td>
-                                      <td
-                                        className='text-wrap'
-                                        style={{ maxWidth: '200px' }}
-                                      >
-                                        {ordo?.traitement
-                                          ? capitalizeWords(
-                                              ordo?.traitement?.motif
-                                            )
-                                          : '-----'}
-                                      </td>
+                                filterSearchOrdonnanceData?.map((ordo) => (
+                                  <tr key={ordo?._id} className='text-center'>
+                                    <th>
+                                      {new Date(
+                                        ordo?.ordonnanceDate
+                                      ).toLocaleDateString('fr-Fr', {
+                                        weekday: 'short',
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                      })}
+                                    </th>
+                                    <td>
+                                      {capitalizeWords(
+                                        ordo?.traitement?.patient?.firstName
+                                      )}{' '}
+                                      {capitalizeWords(
+                                        ordo?.traitement?.patient?.lastName
+                                      )}
+                                    </td>
+                                    <td
+                                      className='text-wrap'
+                                      style={{ maxWidth: '200px' }}
+                                    >
+                                      {ordo?.traitement
+                                        ? capitalizeWords(
+                                            ordo?.traitement?.motif
+                                          )
+                                        : '-----'}
+                                    </td>
 
-                                      <td>
-                                        {new Date(
-                                          ordo?.createdAt
-                                        ).toLocaleDateString('fr-Fr', {
-                                          weekday: 'short',
-                                          year: 'numeric',
-                                          month: '2-digit',
-                                          day: '2-digit',
-                                        })}{' '}
-                                      </td>
+                                    <td>
+                                      {new Date(
+                                        ordo?.createdAt
+                                      ).toLocaleDateString('fr-Fr', {
+                                        weekday: 'short',
+                                        year: 'numeric',
+                                        month: '2-digit',
+                                        day: '2-digit',
+                                      })}{' '}
+                                    </td>
 
-                                      <td>
-                                        {ordo?.items?.length} médicaments
-                                        {'  '}
-                                      </td>
+                                    <td>
+                                      {ordo?.items?.length} médicaments
+                                      {'  '}
+                                    </td>
 
-                                      <td>
-                                        {isDeletting && <LoadingSpiner />}
-                                        {!isDeletting && (
-                                          <div className='d-flex gap-2'>
-                                            {connectedUserRole === 'admin' && (
-                                              <div>
-                                                <button
-                                                  className='btn btn-sm btn-secondary '
-                                                  onClick={() =>
-                                                    navigate(
-                                                      `/traitements/updateOrdonnance/${ordo?._id}`
-                                                    )
-                                                  }
-                                                >
-                                                  <i className=' bx bx-edit-alt text-white'></i>
-                                                </button>
-                                              </div>
-                                            )}
-                                            <div className='show-details'>
+                                    <td>
+                                      {isDeletting && <LoadingSpiner />}
+                                      {!isDeletting && (
+                                        <div className='d-flex gap-2'>
+                                          {connectedUserRole === 'admin' && (
+                                            <div>
                                               <button
-                                                className='btn btn-sm btn-info '
-                                                data-bs-toggle='modal'
-                                                data-bs-target='#showdetails'
-                                                onClick={() => {
+                                                className='btn btn-sm btn-secondary '
+                                                onClick={() =>
                                                   navigate(
-                                                    `/ordonnance/details/${ordo?._id}`
-                                                  );
-                                                }}
+                                                    `/traitements/updateOrdonnance/${ordo?._id}`
+                                                  )
+                                                }
                                               >
-                                                <i className=' bx bx-show-alt text-white'></i>
+                                                <i className=' bx bx-edit-alt text-white'></i>
                                               </button>
                                             </div>
-
-                                            {connectedUserRole === 'admin' && (
-                                              <div>
-                                                <button
-                                                  className='btn btn-sm btn-danger '
-                                                  onClick={() =>
-                                                    onCancelOrdonnance(ordo)
-                                                  }
-                                                >
-                                                  Annuler
-                                                </button>
-                                              </div>
-                                            )}
+                                          )}
+                                          <div className='show-details'>
+                                            <button
+                                              className='btn btn-sm btn-info '
+                                              data-bs-toggle='modal'
+                                              data-bs-target='#showdetails'
+                                              onClick={() => {
+                                                navigate(
+                                                  `/ordonnance/details/${ordo?._id}`
+                                                );
+                                              }}
+                                            >
+                                              <i className=' bx bx-show-alt text-white'></i>
+                                            </button>
                                           </div>
-                                        )}
-                                      </td>
-                                    </tr>
-                                  )
-                                )}
+
+                                          {connectedUserRole === 'admin' && (
+                                            <div>
+                                              <button
+                                                className='btn btn-sm btn-danger '
+                                                onClick={() =>
+                                                  onCancelOrdonnance(ordo)
+                                                }
+                                              >
+                                                <i className='fas fa-trash'></i>
+                                              </button>
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                    </td>
+                                  </tr>
+                                ))}
                             </tbody>
                           </table>
                         )}

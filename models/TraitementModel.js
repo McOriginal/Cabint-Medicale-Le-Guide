@@ -26,6 +26,12 @@ const traitementSchema = new mongoose.Schema(
     width: {
       type: String,
     },
+    temperature:{
+      type: String,
+    },
+    tension:{
+      type: String,
+    },
     nc: {
       type: String,
     },
@@ -45,6 +51,11 @@ const traitementSchema = new mongoose.Schema(
     observation: {
       type: String,
     },
+    traitDate:{
+      type: Date,
+      required: true,
+      default: new Date(),
+    },
 
     totalAmount: {
       type: Number,
@@ -61,9 +72,10 @@ const traitementSchema = new mongoose.Schema(
 
     // Clé de rélation Matières
     doctor: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Doctor',
       required: true,
-      trim:true,
+      trim: true,
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

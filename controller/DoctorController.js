@@ -10,15 +10,13 @@ exports.createDoctor = async (req, res) => {
     const lowerFirstName = firstName.toLowerCase();
     const lowerLastName = lastName.toLowerCase();
     const lowerAdresse = adresse.toLowerCase();
-    const lowerEmail = emailAdresse.toLowerCase();
 
     const phoneNumber = Number(req.body.phoneNumber);
 
     if (
       !textValidation.stringValidator(lowerFirstName) ||
-      !textValidation.stringValidator(lowerLastName) ||
-      (emailAdresse != '' && !textValidation.stringValidator(lowerAdresse)) ||
-      (adresse != '' && !textValidation.emailValidation(emailAdresse))
+      !textValidation.stringValidator(lowerLastName) 
+      
     ) {
       return res.status(400).json({
         status: 'error',
@@ -28,13 +26,13 @@ exports.createDoctor = async (req, res) => {
 
     // Vérification des champs uniques
     const existingDoctor = await Doctor.findOne({
-      $or: [{ emailAdresse: lowerEmail }, { phoneNumber }],
+      $or: [{ emailAdresse }, { phoneNumber }],
     }).exec();
 
     if (existingDoctor) {
       const duplicateFields = [];
 
-      if (existingDoctor.emailAdresse === lowerEmail)
+      if (existingDoctor.emailAdresse === emailAdresse)
         duplicateFields.push('Le champ email existe déjà. ');
       if (existingDoctor.phoneNumber === phoneNumber)
         duplicateFields.push('Le champ téléphone existe déjà ');
@@ -56,8 +54,8 @@ exports.createDoctor = async (req, res) => {
     const newDoctor = await Doctor.create({
       firstName: lowerFirstName,
       lastName: lowerLastName,
-      emailAdresse: lowerEmail,
       adresse: lowerAdresse,
+      emailAdresse,
       user: req.user.id,
       ...resOfData,
     });
@@ -106,22 +104,19 @@ exports.updateDoctor = async (req, res) => {
   const {
     firstName,
     lastName,
-    emailAdresse,
     adresse,
     phoneNumber,
+    emailAdresse,
     ...resOfData
   } = req.body;
   // Changer les données en miniscule
   const lowerFirstName = firstName.toLowerCase();
   const lowerLastName = lastName.toLowerCase();
   const lowerAdresse = adresse.toLowerCase();
-  const lowerEmail = emailAdresse.toLowerCase();
 
   if (
     !textValidation.stringValidator(lowerFirstName) ||
-    !textValidation.stringValidator(lowerLastName) ||
-    !textValidation.stringValidator(lowerAdresse) ||
-    !textValidation.emailValidation(emailAdresse)
+    !textValidation.stringValidator(lowerLastName) 
   ) {
     return res.status(400).json({
       status: 'error',
@@ -135,13 +130,13 @@ exports.updateDoctor = async (req, res) => {
   // Vérification des doublons (en excluant l'étudiant actuel)
   const existingDoctor = await Doctor.findOne({
     _id: { $ne: req.params.id }, // Exclure l'étudiant actuel
-    $or: [{ emailAdresse: lowerEmail }, { phoneNumber: phoneNum }],
+    $or: [{ emailAdresse }, { phoneNumber: phoneNum }],
   }).exec();
 
   if (existingDoctor) {
     const duplicateFields = [];
 
-    if (existingDoctor.emailAdresse === lowerEmail) {
+    if (existingDoctor.emailAdresse === emailAdresse) {
       duplicateFields.push('email');
     }
     if (existingDoctor.phoneNumber === phoneNum) {
@@ -160,8 +155,8 @@ exports.updateDoctor = async (req, res) => {
       {
         firstName: lowerFirstName,
         lastName: lowerLastName,
-        emailAdresse: lowerEmail,
         adresse: lowerAdresse,
+        emailAdresse,
         phoneNumber: phoneNum,
         ...resOfData,
       },

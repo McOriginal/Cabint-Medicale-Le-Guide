@@ -43,9 +43,7 @@ const doctorSchema = new mongoose.Schema(
     guardDays: {
       type: String,
     },
-    statut: {
-      type: String,
-    },
+   
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',

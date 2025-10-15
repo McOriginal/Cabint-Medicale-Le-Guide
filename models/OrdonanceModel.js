@@ -41,7 +41,7 @@ const ordonanceSchema = new mongoose.Schema(
     ordonnanceDate:{
       type: Date,
       require: true,
-      default: new Date()
+      default: new Date(),
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,

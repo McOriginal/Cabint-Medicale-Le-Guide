@@ -25,9 +25,11 @@ const patientSchema = new mongoose.Schema(
     },
     groupeSanguin: {
       type: String,
+      defaul: 'no définis'
     },
     ethnie: {
       type: String,
+      required: true,
     },
     profession: {
       type: String,
@@ -35,7 +37,7 @@ const patientSchema = new mongoose.Schema(
 
     adresse: {
       type: String,
-      required: true,
+      default: 'bamako',
       max: 30,
     },
     user: {

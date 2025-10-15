@@ -24,18 +24,17 @@ import { useParams } from 'react-router-dom';
 
 const PaiementsHistoriqueForm = ({
   selectedPaiementHistoriqueToUpdate,
+  totalReliqua,
   tog_form_modal,
 }) => {
   // Récuperation de ID dans URL en utilisant UsParams
-  const selectedCommande = useParams();
+  const param = useParams();
 
   // Paiement Query pour créer la Paiement
   const { mutate: createPaiementHistorique } = useCreatePaiementHistorique();
 
   // Query Update Paiament Historique
   const { mutate: updatePaiementHistorique } = useUpdatePaiementHistorique();
-  // Query pour affiche toutes les selectedCommandeData
-  // const { data: selectedCommandeData } = useOneCommande(selectedCommande.id);
 
   // State pour gérer le chargement
   const [isLoading, setIsLoading] = useState(false);
@@ -45,11 +44,12 @@ const PaiementsHistoriqueForm = ({
     enableReinitialize: true,
 
     initialValues: {
-      commande: selectedCommande.id,
+      ordonnance:
+        selectedPaiementHistoriqueToUpdate?.ordonnance?._id || param.id,
       paiementDate:
         selectedPaiementHistoriqueToUpdate?.paiementDate?.substring(0, 10) ||
-        undefined,
-      amount: selectedPaiementHistoriqueToUpdate?.amount || undefined,
+        new Date().toISOString().split('T')[0],
+      amount: selectedPaiementHistoriqueToUpdate?.amount || '',
       methode: selectedPaiementHistoriqueToUpdate?.methode || '',
     },
     validationSchema: Yup.object({
@@ -90,7 +90,7 @@ const PaiementsHistoriqueForm = ({
       } else {
         // on ajoute le paiements dans l'historique
         createPaiementHistorique(
-          { ...values, commande: selectedCommande.id },
+          { ...values, ordonnance: param.id },
           {
             onSuccess: () => {
               successMessageAlert('Paiement ajoutée avec succès');
@@ -128,7 +128,7 @@ const PaiementsHistoriqueForm = ({
         return false;
       }}
     >
-      {/* <Row>
+      <Row>
         <Col sm={12}>
           <FormGroup className='mb-3'>
             <Label htmlFor='amount'>Somme Payé</Label>
@@ -137,10 +137,7 @@ const PaiementsHistoriqueForm = ({
               name='amount'
               type='number'
               min={0}
-              max={
-                selectedCommandeData?.paiementCommande?.totalAmount -
-                selectedCommandeData?.paiementCommande?.totalPaye
-              }
+              max={totalReliqua}
               placeholder='Somme Payé'
               className='form-control no-spinner border-1 border-dark'
               id='amount'
@@ -160,7 +157,7 @@ const PaiementsHistoriqueForm = ({
             ) : null}
           </FormGroup>
         </Col>
-      </Row> */}
+      </Row>
       <Row>
         <Col md='12'>
           <FormGroup className='mb-3'>

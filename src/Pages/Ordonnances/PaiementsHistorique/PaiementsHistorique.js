@@ -23,7 +23,7 @@ import PaiementForm from '../../Paiements/PaiementForm';
 import FacturePaiement from './FacturePaiement';
 import PaiementsHistoriqueForm from './PaiementsHistoriqueForm';
 import { useParams } from 'react-router-dom';
-import { useAllPaiements } from '../../../Api/queriesPaiement';
+import { useOneOrdonnance } from '../../../Api/queriesOrdonnance';
 
 export default function PaiementsHistorique() {
   const param = useParams();
@@ -40,16 +40,11 @@ export default function PaiementsHistorique() {
     isLoading,
     error,
   } = useAllPaiementsHistorique();
+  const { data: ordonnanceData } = useOneOrdonnance(param.id);
 
   // State pour supprimer le Paiement dans l'historique
   const { mutate: deletePaiementHistorique, isDeleting } =
     useDeletePaiementHistorique();
-
-  const { data: paiementData } = useAllPaiements();
-
-  const filterPaiement = paiementData?.filter(
-    (item) => item?.ordonnance?._id === param.id
-  );
 
   // Ouverture de Modal Form
   function tog_historique_form_modal() {
@@ -70,10 +65,15 @@ export default function PaiementsHistorique() {
   );
 
   // Calculer le Total Payés
-  const calculateTatalPayed = filterPaiementHistorique?.reduce((acc, item) => {
-    const result = (acc += item?.amount);
-    return result;
-  }, 0);
+  const sumTatalPayed = filterPaiementHistorique?.reduce(
+    (acc, item) => (acc += item?.amount),
+    0
+  );
+
+  const ordonnanceAmount = ordonnanceData?.ordonnances?.totalAmount;
+  const traitementAmount = ordonnanceData?.traitements?.totalAmount;
+  const totalAmountToPay = ordonnanceAmount + traitementAmount;
+  const reliqua = totalAmountToPay - sumTatalPayed;
 
   return (
     // <React.Fragment>
@@ -101,6 +101,7 @@ export default function PaiementsHistorique() {
             <PaiementsHistoriqueForm
               tog_form_modal={tog_historique_form_modal}
               selectedPaiementHistoriqueToUpdate={paiementHistoriqueToUpdate}
+              totalReliqua={reliqua}
             />
           }
         />
@@ -131,7 +132,7 @@ export default function PaiementsHistorique() {
                           onClick={() => {
                             setPaiementHistoriqueToUpdate(null);
                             setFormTitle('Nouveau Historique de Paiement');
-                            filterPaiement?.length > 0
+                            filterPaiementHistorique?.length > 0
                               ? tog_historique_form_modal()
                               : tog_form_modal();
                           }}
@@ -141,26 +142,26 @@ export default function PaiementsHistorique() {
                         </Button>
                       </div>
                     </Col>
-                    {/* <Col>
-                        <div className='d-flex flex-column justify-content-center align-items-end '>
-                          <h6>
-                            Total Payé:{' '}
-                            <span className='text-success'>
-                              {formatPrice(calculateTatalPayed)} F
-                            </span>
-                          </h6>
-                          <h6>
-                            Reliquat:{' '}
-                            <span
-                              className={`text-${
-                                reliqua > 0 ? 'danger' : 'success'
-                              }`}
-                            >
-                              {formatPrice(reliqua)} F
-                            </span>
-                          </h6>
-                        </div>
-                      </Col> */}
+                    <Col>
+                      <div className='d-flex flex-column justify-content-center align-items-end '>
+                        <h6>
+                          Total Payé:{' '}
+                          <span className='text-success'>
+                            {formatPrice(sumTatalPayed)} F
+                          </span>
+                        </h6>
+                        <h6>
+                          Reliquat:{' '}
+                          <span
+                            className={`text-${
+                              reliqua > 0 ? 'danger' : 'success'
+                            }`}
+                          >
+                            {formatPrice(reliqua)} F
+                          </span>
+                        </h6>
+                      </div>
+                    </Col>
                   </Row>
                   {error && (
                     <div className='text-danger text-center'>

@@ -17,6 +17,7 @@ const FormModal = ({
       size={size}
       scrollable={true}
       centered={true}
+      backdrop='static'
     >
       <div className='modal-header'>
         <h5 className='modal-title mt-0'>{modal_title}</h5>

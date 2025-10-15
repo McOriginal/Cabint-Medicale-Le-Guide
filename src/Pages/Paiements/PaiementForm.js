@@ -10,7 +10,7 @@ import {
 } from 'reactstrap';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import {
   errorMessageAlert,
   successMessageAlert,
@@ -20,7 +20,7 @@ import {
   useCreatePaiement,
   useUpdatePaiement,
 } from '../../Api/queriesPaiement';
-import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
+import { formatPrice } from '../components/capitalizeFunction';
 import { useParams } from 'react-router-dom';
 import { useOneOrdonnance } from '../../Api/queriesOrdonnance';
 

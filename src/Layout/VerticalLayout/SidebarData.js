@@ -61,8 +61,8 @@ const SidebarData = [
     label: 'Comptablité',
     icon: 'fas fa-euro-sign',
     subItem: [
-      { sublabel: 'Paiement', link: '/paiements' },
-      { sublabel: 'Historique des Paiements', link: '/factures' },
+      { sublabel: 'Historique des Paiements', link: '/paiements' },
+      // { sublabel: 'Historique des Paiements', link: '/factures' },
       { sublabel: 'Dépense', link: '/depenses' },
     ],
   },

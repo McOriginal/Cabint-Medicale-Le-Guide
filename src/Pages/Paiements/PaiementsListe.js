@@ -60,7 +60,7 @@ export default function PaiementsListe() {
 
   // Total Reçu
   const sumTotalRecu = paiementsData?.reduce((acc, item) => {
-    const sum = item?.ordonnance?.traitement?.totalAmount || 0;
+    const sum = item?.traitement?.totalAmount || 0;
     return acc + sum;
   }, 0);
 

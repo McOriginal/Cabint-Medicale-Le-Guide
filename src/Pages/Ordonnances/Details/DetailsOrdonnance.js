@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Button,
   Card,
@@ -28,12 +28,13 @@ import { useOneOrdonnance } from '../../../Api/queriesOrdonnance';
 import { useParams } from 'react-router-dom';
 import PaiementsHistorique from '../PaiementsHistorique/PaiementsHistorique';
 import { useReactToPrint } from 'react-to-print';
+import ProtocoleOrdonnance from './ProtocoleOrdonnance';
 
 export default function DetailsOrdonnance() {
   const param = useParams();
   const contentRef = useRef();
   const reactToPrintFn = useReactToPrint({ contentRef });
-
+  const [tog_display_modal, set_tog_display_modal] = useState(false);
   const {
     data: selectedOrdonnanceData,
     isLoading: isLoadingOrdonnance,
@@ -61,9 +62,23 @@ export default function DetailsOrdonnance() {
       .catch((err) => console.error('Error generating PDF:', err));
   };
 
+  const tog_modal = () => {
+    set_tog_display_modal(!tog_display_modal);
+  };
+
+  const traitement = selectedOrdonnanceData?.traitement;
+  const patient = selectedOrdonnanceData?.traitement?.patient;
+  const doctor = selectedOrdonnanceData?.traitement?.doctor;
+
   return (
     <React.Fragment>
       <div className='page-content'>
+        <ProtocoleOrdonnance
+          tog_open_modal={tog_modal}
+          display_modal={tog_display_modal}
+          setClose_modal={set_tog_display_modal}
+        />
+        {/* -------------------------------------------------------------- */}
         <Container fluid>
           <div className='d-flex gap-1 justify-content-around align-items-center w-100'>
             <Button
@@ -73,6 +88,10 @@ export default function DetailsOrdonnance() {
               onClick={reactToPrintFn}
             >
               <i className='fas fa-print align-center me-1'></i> Imprimer
+            </Button>
+
+            <Button color='secondary' onClick={() => tog_modal()}>
+              Protocole
             </Button>
 
             <Button color='danger' onClick={exportToPDF}>
@@ -97,12 +116,10 @@ export default function DetailsOrdonnance() {
                 style={{
                   boxShadow: '0px 0px 10px rgba(100, 169, 238, 0.5)',
                   borderRadius: '15px',
-                  width: '583px',
+                  width: '550px',
                   minHeight: '500px',
                   margin: '20px auto',
                   position: 'relative',
-
-                  // background: 'rgba(1, 61, 120, 0.1)',
                 }}
                 className='text-info'
               >
@@ -154,25 +171,17 @@ export default function DetailsOrdonnance() {
                     <div className='font-size-12'>
                       <p className='my-1'>
                         <strong> Nom:</strong>{' '}
-                        {capitalizeWords(
-                          selectedOrdonnanceData?.traitements?.patient
-                            ?.firstName
-                        )}{' '}
+                        {capitalizeWords(patient?.firstName)}{' '}
                       </p>
                       <p className='my-1'>
                         <strong> Prénom:</strong>{' '}
-                        {capitalizeWords(
-                          selectedOrdonnanceData?.traitements?.patient?.lastName
-                        )}
+                        {capitalizeWords(patient?.lastName)}
                       </p>
                       <p className='my-1'>
                         <strong> Prescirpteur:</strong>{' '}
                         {capitalizeWords(
-                          selectedOrdonnanceData?.traitements?.doctor
-                            ?.firstName +
-                            ' ' +
-                            selectedOrdonnanceData?.traitements?.doctor
-                              ?.lastName
+                          doctor?.firstName + ' ' + doctor?.lastName ||
+                            '--------'
                         )}
                       </p>
                     </div>
@@ -180,45 +189,39 @@ export default function DetailsOrdonnance() {
                       <p className='my-1'>
                         <strong> Date:</strong>{' '}
                         {new Date(
-                          selectedOrdonnanceData?.ordonnances?.ordonnanceDate
+                          selectedOrdonnanceData?.ordonnanceDate
                         ).toLocaleDateString('fr-Fr')}
                       </p>
                       <p className='d-flex justify-content-between align-items-center gap-3 my-1 '>
                         <span>
                           <strong>Sexe: </strong>{' '}
-                          {capitalizeWords(
-                            selectedOrdonnanceData?.traitements?.patient?.gender
-                          )}
+                          {capitalizeWords(patient?.gender)}
                         </span>
 
                         <span>
                           <strong>Age: </strong>
-                          {selectedOrdonnanceData?.traitements?.patient?.age}
+                          {patient?.age}
                         </span>
                       </p>
                       <p className='d-flex justify-content-between align-items-center gap-3 my-1 '>
                         <span>
                           <strong>Taille: </strong>{' '}
-                          {selectedOrdonnanceData?.traitements?.height ||
-                            '----'}
+                          {traitement?.height || '----'}
                         </span>
 
                         <span>
                           <strong>Poids: </strong>
-                          {selectedOrdonnanceData?.traitements?.width || '----'}
+                          {traitement?.width || '----'}
                         </span>
                       </p>
                       <p className='d-flex justify-content-between align-items-center gap-3 my-1 '>
                         <span>
-                          <strong>TA: </strong>{' '}
-                          {selectedOrdonnanceData?.traitements?.tension ||
-                            '----'}
+                          <strong>TA: </strong> {traitement?.tension || '----'}
                         </span>
 
                         <span>
                           <strong>T°: </strong>
-                          {selectedOrdonnanceData?.traitements?.temperature ||
-                            '----'}
+                          {traitement?.temperature || '----'}
                         </span>
                       </p>
                     </div>
@@ -243,34 +246,32 @@ export default function DetailsOrdonnance() {
                       <strong> Ordonnance:</strong>
                     </p>
                     <ul className='list-unstyled'>
-                      {selectedOrdonnanceData?.ordonnances?.items?.map(
-                        (item, index) => (
-                          <li
-                            key={item._id}
-                            className='border-2 border-grey border-bottom text-center py-2'
-                          >
-                            <p>
-                              <strong>{index + 1}</strong>
-                              {' : '}
-                              {capitalizeWords(item?.medicaments?.name)}
-                              <span className='mx-2'>
-                                <strong>
-                                  {' ==> '} {formatPrice(item?.quantity)}
-                                </strong>
-                              </span>
-                              <strong className='ms-4 text-primary'>
-                                {' '}
-                                {formatPrice(
-                                  item?.customerPrice * item?.quantity ||
-                                    item?.medicaments?.price * item?.quantity
-                                )}{' '}
-                                F
+                      {selectedOrdonnanceData?.items?.map((item, index) => (
+                        <li
+                          key={item._id}
+                          className='border-2 border-grey border-bottom text-center py-2'
+                        >
+                          <p>
+                            <strong>{index + 1}</strong>
+                            {' : '}
+                            {capitalizeWords(item?.medicaments?.name)}
+                            <span className='mx-2'>
+                              <strong>
+                                {' ==> '} {formatPrice(item?.quantity)}
                               </strong>
-                            </p>
-                            {capitalizeWords(` ----> ${item.protocole}`)}
-                          </li>
-                        )
-                      )}
+                            </span>
+                            <strong className='ms-4 text-primary'>
+                              {' '}
+                              {formatPrice(
+                                item?.customerPrice * item?.quantity ||
+                                  item?.medicaments?.price * item?.quantity
+                              )}{' '}
+                              F
+                            </strong>
+                          </p>
+                          {capitalizeWords(` ----> ${item.protocole}`)}
+                        </li>
+                      ))}
                     </ul>
                   </div>
                 </CardBody>
@@ -280,8 +281,8 @@ export default function DetailsOrdonnance() {
                     <strong> Montant Total: </strong>{' '}
                     <span className='fs-5'>
                       {formatPrice(
-                        selectedOrdonnanceData?.traitements?.totalAmount +
-                          selectedOrdonnanceData?.ordonnances?.totalAmount
+                        traitement?.totalAmount +
+                          selectedOrdonnanceData?.totalAmount
                       )}{' '}
                       FCFA
                     </span>

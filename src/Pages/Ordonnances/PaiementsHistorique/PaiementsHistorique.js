@@ -70,8 +70,8 @@ export default function PaiementsHistorique() {
     0
   );
 
-  const ordonnanceAmount = ordonnanceData?.ordonnances?.totalAmount;
-  const traitementAmount = ordonnanceData?.traitements?.totalAmount;
+  const ordonnanceAmount = ordonnanceData?.totalAmount;
+  const traitementAmount = ordonnanceData?.traitement?.totalAmount;
   const totalAmountToPay = ordonnanceAmount + traitementAmount;
   const reliqua = totalAmountToPay - sumTatalPayed;
 
@@ -123,25 +123,27 @@ export default function PaiementsHistorique() {
               <CardBody>
                 <div id='paiementsList'>
                   <Row className='g-4 mb-3'>
-                    <Col className='col-sm-auto'>
-                      <div className='d-flex gap-1'>
-                        <Button
-                          color='info'
-                          className='add-btn'
-                          id='create-btn'
-                          onClick={() => {
-                            setPaiementHistoriqueToUpdate(null);
-                            setFormTitle('Nouveau Historique de Paiement');
-                            filterPaiementHistorique?.length > 0
-                              ? tog_historique_form_modal()
-                              : tog_form_modal();
-                          }}
-                        >
-                          <i className='fas fa-dollar-sign align-center me-1'></i>{' '}
-                          Ajouter un Paiement
-                        </Button>
-                      </div>
-                    </Col>
+                    {totalAmountToPay < sumTatalPayed && (
+                      <Col className='col-sm-auto'>
+                        <div className='d-flex gap-1'>
+                          <Button
+                            color='info'
+                            className='add-btn'
+                            id='create-btn'
+                            onClick={() => {
+                              setPaiementHistoriqueToUpdate(null);
+                              setFormTitle('Nouveau Historique de Paiement');
+                              filterPaiementHistorique?.length > 0
+                                ? tog_historique_form_modal()
+                                : tog_form_modal();
+                            }}
+                          >
+                            <i className='fas fa-dollar-sign align-center me-1'></i>{' '}
+                            Ajouter un Paiement
+                          </Button>
+                        </div>
+                      </Col>
+                    )}
                     <Col>
                       <div className='d-flex flex-column justify-content-center align-items-end '>
                         <h6>
@@ -235,8 +237,6 @@ export default function PaiementsHistorique() {
                                       <div>
                                         <button
                                           className='btn btn-sm btn-secondary show-item-btn'
-                                          data-bs-toggle='modal'
-                                          data-bs-target='#showModal'
                                           onClick={() => {
                                             setSelectedPaiement(paiement?._id);
                                             tog_facture_modal();
@@ -249,8 +249,6 @@ export default function PaiementsHistorique() {
                                         <div>
                                           <button
                                             className='btn btn-sm btn-warning show-item-btn'
-                                            data-bs-toggle='modal'
-                                            data-bs-target='#edit'
                                             onClick={() => {
                                               setPaiementHistoriqueToUpdate(
                                                 paiement

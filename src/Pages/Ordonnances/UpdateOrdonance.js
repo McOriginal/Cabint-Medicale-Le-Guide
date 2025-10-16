@@ -208,7 +208,7 @@ export default function UpdateOrdonance() {
             setIsSubmitting(false);
 
             // Rédirection sur la page PAIEMENT
-            navigate('/paiements');
+            navigate('/ordonnances');
           },
           onError: (err) => {
             const message =
@@ -345,7 +345,9 @@ export default function UpdateOrdonance() {
                         </div>
                       </div>
                       <div>
-                        <Label for='protocole'>Protocole </Label>
+                        <Label for='protocole'>
+                          Protocole <RequiredFormField />
+                        </Label>
                         <Input
                           name='protocole'
                           id='protocole'

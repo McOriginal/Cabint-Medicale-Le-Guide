@@ -179,20 +179,20 @@ exports.getAllOrdonnances = async (req, res) => {
 exports.getOneOrdonnance = async (req, res) => {
   try {
     const ordonnance = await Ordonnance.findById(req.params.id)
-      .populate('user')
-      .populate('items.medicaments');
-
-    // ID de Traitement
-    const traitementId = ordonnance.traitement._id;
-
-    // Récupérer les patients à travers le traitement
-    const trait = await Traitement.findById(traitementId)
-      .populate('patient')
-      .populate('doctor');
+    .populate('items.medicaments')
+    .populate(
+      {
+        path: 'traitement',
+      
+      populate:[{path:'patient'} ,{ path: 'doctor'}]
+    
+    }
+  )
+    .populate('user')
 
     return res
       .status(201)
-      .json({ ordonnances: ordonnance, traitements: trait });
+      .json( ordonnance );
   } catch (e) {
     return res.status(404).json(e);
   }

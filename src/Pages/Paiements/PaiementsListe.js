@@ -1,16 +1,13 @@
 import React, { useState } from 'react';
 import { Button, Card, CardBody, Col, Container, Row } from 'reactstrap';
 import Breadcrumbs from '../../components/Common/Breadcrumb';
-import FormModal from '../components/FormModal';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 import { deleteButton } from '../components/AlerteModal';
 import { useAllPaiements, useDeletePaiement } from '../../Api/queriesPaiement';
-import PaiementForm from './PaiementForm';
 import { useNavigate } from 'react-router-dom';
 
 export default function PaiementsListe() {
-  const [form_modal, setForm_modal] = useState(false);
   const { data: paiementsData, isLoading, error } = useAllPaiements();
   const { mutate: deletePaiement, isDeleting } = useDeletePaiement();
 
@@ -316,7 +313,7 @@ export default function PaiementsListe() {
                                                 onClick={() => {
                                                   deleteButton(
                                                     paiement?._id,
-                                                    `Paiement de ${paiement?.totalAmount} F
+                                                    `Paiement de ${paiement?.totalPaye} F
                                                    `,
                                                     deletePaiement
                                                   );

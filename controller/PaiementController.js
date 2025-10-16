@@ -109,12 +109,35 @@ exports.getPaiement = async (req, res) => {
 
 // Supprimer un paiement
 exports.deletePaiement = async (req, res) => {
+  const session = await mongoose.startSession()
+  session.startTransaction()
   try {
-    await Paiement.findByIdAndDelete(req.params.id);
-    res
+    const paiement = await Paiement.findById(req.params.id).session(session);
+const histPaie = await PaiementHistorique.find({ordonnance: paiement.ordonnance}).session(session);
+
+if(!paiement || !histPaie){
+  await session.abortTransaction()
+  session.endSession()
+  return res.status(404).json({message: "Aucun Paiement trouvée"});
+}
+
+for(const paie of histPaie){
+  await PaiementHistorique.findByIdAndDelete(paie._id).session(session)
+}
+ 
+
+await Paiement.findByIdAndDelete(req.params.id).session(session);
+
+
+    await session.commitTransaction()
+    session.endSession()
+    return res
       .status(200)
       .json({ status: 'success', message: 'Paiement supprimé avec succès' });
   } catch (err) {
+    await session.abortTransaction()
+    session.endSession()
+    console.log(err)
     res.status(400).json({ status: 'error', message: err.message });
   }
 };

@@ -6,14 +6,9 @@ import {
   CardFooter,
   CardHeader,
   CardImg,
-  CardText,
-  Container,
   Modal,
 } from 'reactstrap';
-import {
-  capitalizeWords,
-  formatPrice,
-} from '../../components/capitalizeFunction';
+import { capitalizeWords } from '../../components/capitalizeFunction';
 import {
   bgLogo,
   hospitalAdresse,

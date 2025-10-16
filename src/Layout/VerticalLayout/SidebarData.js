@@ -45,6 +45,13 @@ const SidebarData = [
     url: '/ordonnances',
   },
 
+  {
+    label: 'Ordonnances Externe',
+    icon: 'fas fa-first-aid',
+    isHasArrow: true,
+    url: '/externe-ordonnance/liste',
+  },
+
   // Transactions
   {
     label: 'Paiements',

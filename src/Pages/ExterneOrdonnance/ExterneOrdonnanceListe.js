@@ -1,5 +1,13 @@
 import { useNavigate } from 'react-router-dom';
-import { BreadcrumbItem, Button, Card, CardBody, Container } from 'reactstrap';
+import {
+  BreadcrumbItem,
+  Button,
+  Card,
+  CardBody,
+  Col,
+  Container,
+  Row,
+} from 'reactstrap';
 import {
   useAllExterneOrdonnances,
   useDeleteExterneOrdonnance,
@@ -8,72 +16,83 @@ import { capitalizeWords, formatPrice } from '../components/capitalizeFunction';
 import LoadingSpiner from '../components/LoadingSpiner';
 import { connectedUserRole } from '../Authentication/userInfos';
 import { deleteButton } from '../components/AlerteModal';
+import { useState } from 'react';
 
 export default function ExterneOrdonnanceListe() {
   const navigate = useNavigate();
-
+  const [searchTerm, setSearchTerm] = useState('');
   const { data: ordonnanceData, isLoading, error } = useAllExterneOrdonnances();
   const { mutate: deleteOrdonnance, isLoading: isDeletting } =
     useDeleteExterneOrdonnance();
+
+  const filteredOrdonnances = ordonnanceData?.filter((ordo) => {
+    const term = searchTerm.toLowerCase();
+    return (
+      ordo.patient.toLowerCase().includes(term) ||
+      ordo.traitement.toLowerCase().includes(term) ||
+      ordo.doctor.toLowerCase().includes(term)
+    );
+  });
+
   return (
     <div className='page-content'>
       <Container fluid>
         <BreadcrumbItem title='Ordonnance Externe' />
         <Card>
-          <h3>Liste des Ordonnances Externes</h3>
           <CardBody>
-            <Button
-              color='info'
-              className='d-flex justify-content-center align-items-center gap-2'
-              onClick={() => navigate('/externe-ordonnance/new')}
-            >
-              <i className='fas fa-plus'></i>
-              Ajouter
-            </Button>
-
+            <h3 className='text-center'>Liste des Ordonnances Externes</h3>
             <div id='ordonnanceList'>
-              <div className='d-flex justify-content-between align-items-center'>
-                <div className='col-sm-auto'>
-                  <div className='d-flex align-items-center gap-2'>
-                    <h5 className='mb-0'>Total Ordonnances:</h5>
-                    <span className='badge bg-info'>
-                      {formatPrice(ordonnanceData?.length) || 0}
-                    </span>
-                  </div>
-                </div>
-                {/* Barre de recherche */}
-                {/* <div className='d-flex justify-content-sm-end gap-3'>
-                        {searchTerm !== '' && (
-                          <Button
-                            color='warning'
-                            onClick={() => setSearchTerm('')}
-                          >
-                            {' '}
-                            <i className='fas fa-window-close'></i>{' '}
-                          </Button>
-                        )}
+              <Row>
+                <Col md={6}>
+                  <Button
+                    color='info'
+                    className='d-flex justify-content-center align-items-center gap-2'
+                    onClick={() => navigate('/externe-ordonnance/new')}
+                  >
+                    <i className='fas fa-plus'></i>
+                    Ajouter
+                  </Button>
+                </Col>
+                <Col md={6}>
+                  {/* Barre de recherche */}
+                  <div className='d-flex justify-content-sm-end gap-3'>
+                    {searchTerm !== '' && (
+                      <Button color='warning' onClick={() => setSearchTerm('')}>
+                        {' '}
+                        <i className='fas fa-window-close'></i>{' '}
+                      </Button>
+                    )}
 
-                        <div className='search-box me-4'>
-                          <input
-                            type='text'
-                            className='form-control search border border-dark rounded'
-                            placeholder='Rechercher...'
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                          />
-                        </div>
-                      </div> */}
+                    <div className='search-box me-4'>
+                      <input
+                        type='text'
+                        className='form-control search border border-dark rounded'
+                        placeholder='Rechercher...'
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                      />
+                    </div>
+                  </div>
+                </Col>
+              </Row>
+              <div className='col-sm-auto'>
+                <div className='d-flex justify-content-center align-items-center gap-2'>
+                  <h5 className='my-4 text-center'>Total Ordonnances:</h5>
+                  <span className='badge bg-info'>
+                    {formatPrice(filteredOrdonnances?.length) || 0}
+                  </span>
+                </div>
               </div>
 
               {isLoading && <LoadingSpiner />}
 
               <div className='table-responsive table-card mt-3 mb-1'>
-                {!error && !isLoading && ordonnanceData?.length === 0 && (
+                {!error && !isLoading && filteredOrdonnances?.length === 0 && (
                   <div className='text-center text-mutate'>
                     Aucune ordonnance pour le moment !
                   </div>
                 )}
-                {!error && !isLoading && ordonnanceData?.length > 0 && (
+                {!error && !isLoading && filteredOrdonnances?.length > 0 && (
                   <table
                     className='table align-middle table-nowrap table-hover'
                     id='ordonnanceTable'
@@ -92,8 +111,8 @@ export default function ExterneOrdonnanceListe() {
                       </tr>
                     </thead>
                     <tbody className='list form-check-all text-center'>
-                      {ordonnanceData?.length > 0 &&
-                        ordonnanceData?.map((ordo) => (
+                      {filteredOrdonnances?.length > 0 &&
+                        filteredOrdonnances?.map((ordo) => (
                           <tr key={ordo?._id} className='text-center'>
                             <th>
                               {new Date(
@@ -110,7 +129,7 @@ export default function ExterneOrdonnanceListe() {
                               className='text-wrap'
                               style={{ maxWidth: '200px' }}
                             >
-                              {capitalizeWords(ordo?.traitement || '-----')}
+                              {capitalizeWords(ordo?.traitement)}
                             </td>
 
                             <td>{capitalizeWords(ordo?.doctor)}</td>

@@ -13,7 +13,7 @@ export const useCreateExterneOrdonnance = () => {
           Authorization: `Bearer ${authUser?.token}`,
         },
       }),
-    onSuccess: () => queryClient.invalidateQueries(['ordonnances']),
+    onSuccess: () => queryClient.invalidateQueries(['externeOrdonnances']),
   });
 };
 
@@ -23,13 +23,13 @@ export const useUpdateExterneOrdonnance = () => {
   return useMutation({
     mutationFn: ({ id, data }) =>
       api.put(`/externeOrdonnances/updateExterneOrdonnance/${id}`, data),
-    onSuccess: () => queryClient.invalidateQueries(['ordonnances']),
+    onSuccess: () => queryClient.invalidateQueries(['externeOrdonnances']),
   });
 };
 // Lire toutes les ordonnances
 export const useAllExterneOrdonnances = () =>
   useQuery({
-    queryKey: ['ordonnances'],
+    queryKey: ['externeOrdonnances'],
     queryFn: () =>
       api
         .get('/externeOrdonnances/getAllExterneOrdonnances')
@@ -39,7 +39,7 @@ export const useAllExterneOrdonnances = () =>
 // Obtenir une Ordonnance
 export const useOneExterneOrdonnance = (id) =>
   useQuery({
-    queryKey: ['ordonnances', id],
+    queryKey: ['externeOrdonnances', id],
     queryFn: () =>
       api
         .get(`/externeOrdonnances/getExterneOrdonnance/${id}`)
@@ -54,6 +54,6 @@ export const useDeleteExterneOrdonnance = () => {
   return useMutation({
     mutationFn: (id) =>
       api.delete(`/externeOrdonnances/deleteExterneOrdonnance/${id}`),
-    onSuccess: () => queryClient.invalidateQueries(['ordonnances']),
+    onSuccess: () => queryClient.invalidateQueries(['externeOrdonnances']),
   });
 };

@@ -2,10 +2,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL:
-    process.env.REACT_APP_API_URL ||
-    //  'http://localhost:5000/api',
-    'https://backend-cabinet-medical-le-guide.onrender.com/api',
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000/api',
+  // 'https://bawckend-cabinet-medical-le-guide.onrender.com/api',
 
   headers: {
     'Content-Type': 'application/json',

@@ -194,6 +194,7 @@ export default function UpdateExterneOrdonnance() {
                           className='border-1 border-dark'
                           onChange={validation.handleChange}
                           onBlur={validation.handleBlur}
+                          max={new Date().toISOString().split('T')[0]}
                           value={validation.values.ordonnanceDate}
                           invalid={
                             validation.touched.ordonnanceDate &&

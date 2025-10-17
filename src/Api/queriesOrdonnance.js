@@ -45,12 +45,12 @@ export const useOneOrdonnance = (id) =>
   });
 
 // Obtenir une Ordonnance
-export const useTraitementOrdonnance = (traitementID) =>
+export const useTraitementOrdonnance = (id) =>
   useQuery({
-    queryKey: ['getTraitementOrdonnance', traitementID],
+    queryKey: ['getTraitementOrdonnance', id],
     queryFn: () =>
       api
-        .get(`/ordonnances/getTraitementOrdonnance/${traitementID}`)
+        .get(`/ordonnances/getTraitementOrdonnance/${id}`)
         .then((res) => res.data),
     staleTime: 1000 * 60 * 5, //chaque 5 minutes rafraichir les données
   });

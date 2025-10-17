@@ -21,23 +21,23 @@ import LoadingSpiner from '../../components/LoadingSpiner';
 import html2pdf from 'html2pdf.js';
 
 import { useOneOrdonnance } from '../../../Api/queriesOrdonnance';
-import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
+import { useParams } from 'react-router-dom';
 
 export default function ProtocoleOrdonnance({
   display_modal,
   tog_open_modal,
   setClose_modal,
+  ordonnance,
 }) {
-  const param = useParams();
   const contentRef = useRef();
   const reactToPrintFn = useReactToPrint({ contentRef });
-
+  const param = useParams();
   const {
     data: selectedOrdonnanceData,
     isLoading: isLoadingOrdonnance,
     error: ordonnanceError,
-  } = useOneOrdonnance(param.id);
+  } = useOneOrdonnance(ordonnance?._id ?? param.id);
 
   // ------------------------------------------
   // ------------------------------------------
@@ -184,7 +184,7 @@ export default function ProtocoleOrdonnance({
                     </p>
                     <p className='my-1'>
                       <strong> Diagnostic:</strong>{' '}
-                      {capitalizeWords(traitement?.diagnostic || '----')}
+                      {capitalizeWords(traitement?.motif || '----')}
                     </p>
                   </div>
                   <div>

@@ -7,18 +7,20 @@ import html2pdf from 'html2pdf.js';
 import { useOnePaiementHistorique } from '../../../Api/queriesPaiementHistorique';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
+import OrdonnanceHeader from '../Details/OrdonnanceHeader';
 
 const FacturePaiement = ({
   show_modal,
   tog_show_modal,
-  selectedPaiementHistoriqueID,
+  selectedPaiement,
+
   reliqua,
 }) => {
   const {
     data: selectedPaiementHistorique,
     error,
     isLoading,
-  } = useOnePaiementHistorique(selectedPaiementHistoriqueID);
+  } = useOnePaiementHistorique(selectedPaiement?._id);
   const contentRef = useRef(null);
   const reactToPrintFn = useReactToPrint({ contentRef });
 
@@ -28,9 +30,9 @@ const FacturePaiement = ({
   // ------------------------------------------
   // ------------------------------------------
   const exportPaiementToPDF = () => {
-    const element = document.getElementById('paiementHistorique');
+    const element = document.getElementById('facture');
     const opt = {
-      filename: 'paiementHistorique.pdf',
+      filename: 'facture.pdf',
       image: { type: 'jpeg', quality: 0.98 },
       html2canvas: { scale: 2 },
       jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
@@ -43,6 +45,9 @@ const FacturePaiement = ({
       .catch((err) => console.error('Error generating PDF:', err));
   };
 
+  const ordonnance = selectedPaiementHistorique?.ordonnance;
+  const traitement = ordonnance?.traitement;
+  const patient = traitement?.patient;
   return (
     <Modal
       isOpen={show_modal}
@@ -83,7 +88,7 @@ const FacturePaiement = ({
       </div>
 
       {/* Modal Body */}
-      <div className='modal-body' ref={contentRef} id='paiementHistorique'>
+      <div className='modal-body' ref={contentRef} id='facture'>
         {!error && !isLoading && (
           <div className='mx-5 d-flex justify-content-center'>
             <Card
@@ -96,29 +101,8 @@ const FacturePaiement = ({
               }}
             >
               <CardBody>
-                {/* <FactureHeader /> */}
+                <OrdonnanceHeader />
 
-                {selectedPaiementHistorique?.commande?.statut === 'livré' &&
-                  reliqua === 0 && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        left: '20px',
-                        transform: 'rotate(-45deg)',
-                        opacity: '0.5',
-                        border: '1px dashed #003f9f',
-                        color: ' #003f9f',
-                        fontSize: ' 34px',
-                        fontweight: 'bold',
-                        width: '100%',
-                        textAlign: 'cente',
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <p> Payé et Livré</p>
-                    </div>
-                  )}
                 <div
                   sm='12'
                   className='d-flex justify-content-around align-items-center mt-4 px-2 '
@@ -127,14 +111,12 @@ const FacturePaiement = ({
                     <CardText>
                       <strong> Nom et Prénom:</strong>{' '}
                       {capitalizeWords(
-                        selectedPaiementHistorique?.commande?.fullName
+                        patient?.firstName + ' ' + patient?.lastName
                       )}
                     </CardText>
                     <CardText>
                       <strong> Adresse:</strong>{' '}
-                      {capitalizeWords(
-                        selectedPaiementHistorique?.commande?.adresse
-                      )}
+                      {capitalizeWords(patient?.adresse)}
                     </CardText>
                   </div>
                   <div

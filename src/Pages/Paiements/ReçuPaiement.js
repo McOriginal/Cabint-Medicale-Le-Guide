@@ -5,7 +5,6 @@ import html2pdf from 'html2pdf.js';
 import { useOnePaiement } from '../../Api/queriesPaiement';
 import { useRef } from 'react';
 import { useReactToPrint } from 'react-to-print';
-import FactureHeader from '../Commandes/Details/FactureHeader';
 
 const ReçuPaiement = ({ show_modal, tog_show_modal, selectedPaiementID }) => {
   const {
@@ -95,57 +94,6 @@ const ReçuPaiement = ({ show_modal, tog_show_modal, selectedPaiementID }) => {
               }}
             >
               <CardBody>
-                <FactureHeader />
-                {selectedPaiement?.commande?.statut === 'livré' &&
-                  selectedPaiement?.totalAmount -
-                    selectedPaiement?.totalPaye ===
-                    0 && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        left: '20px',
-                        transform: 'rotate(-45deg)',
-                        opacity: '0.5',
-                        border: '1px dashed #022f72',
-                        color: ' #022f72',
-                        fontSize: ' 34px',
-                        fontweight: 'bold',
-                        width: '100%',
-                        textAlign: 'cente',
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <p> Payé et Livré</p>
-                    </div>
-                  )}
-
-                {/* Payé Non Livré */}
-                {selectedPaiement?.commande?.statut === 'en attente' &&
-                  selectedPaiement?.totalAmount -
-                    selectedPaiement?.totalPaye ===
-                    0 && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        left: '20px',
-                        transform: 'rotate(-45deg)',
-                        opacity: '0.5',
-                        border: '1px dashed #720202',
-                        color: ' #720202',
-                        fontSize: ' 34px',
-                        fontweight: 'bold',
-                        width: '100%',
-                        textAlign: 'cente',
-                        display: 'flex',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <p> Payé Non Livré</p>
-                    </div>
-                  )}
-
-                {/* Payé Non Livré */}
                 <div
                   sm='12'
                   className='d-flex justify-content-around align-items-center mt-4 px-2 '

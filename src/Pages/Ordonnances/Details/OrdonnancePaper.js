@@ -5,7 +5,6 @@ import {
   CardBody,
   CardFooter,
   CardHeader,
-  CardImg,
   CardText,
   Container,
 } from 'reactstrap';
@@ -13,14 +12,7 @@ import {
   capitalizeWords,
   formatPrice,
 } from '../../components/capitalizeFunction';
-import {
-  bgLogo,
-  hospitalAdresse,
-  hospitalLittleName,
-  hospitalOwnerName,
-  hospitalTel,
-  logoMedical,
-} from '../../CompanyInfo/CompanyInfo';
+import { bgLogo } from '../../CompanyInfo/CompanyInfo';
 import LoadingSpiner from '../../components/LoadingSpiner';
 import html2pdf from 'html2pdf.js';
 
@@ -31,6 +23,7 @@ import {
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 import ProtocoleOrdonnance from './ProtocoleOrdonnance';
+import OrdonnanceHeader from './OrdonnanceHeader';
 
 export default function OrdonnancePaper({ ordonnanceId }) {
   const param = useParams();
@@ -130,48 +123,8 @@ export default function OrdonnancePaper({ ordonnanceId }) {
               >
                 <CardBody className='text-info'>
                   <CardHeader>
-                    <CardImg
-                      src={logoMedical}
-                      style={{
-                        width: '100px',
-                        position: 'absolute',
-                        top: '30px',
-                        left: '10px',
-                      }}
-                    />
-                    <div className='text-center text-info fw-bold '>
-                      <h2 className='text-info fw-bold'>CABINET MEDICAL </h2>
-                      <h2 className='text-info fw-bold'>
-                        "{hospitalLittleName}"{' '}
-                      </h2>
-                      <p
-                        style={{
-                          margin: '5px',
-                          fontSize: '12px',
-                          fontWeight: 'bold',
-                        }}
-                      >
-                        {hospitalOwnerName}
-                      </p>
-                      <p style={{ margin: '5px', fontSize: '10px' }}>
-                        {hospitalTel}
-                      </p>
-                      <p style={{ margin: '5px', fontSize: '10px' }}>
-                        {hospitalAdresse}
-                      </p>
-                    </div>
-
-                    <CardImg
-                      src={logoMedical}
-                      style={{
-                        width: '100px',
-                        position: 'absolute',
-                        top: '30px',
-                        right: '10px',
-                      }}
-                    />
+                    <OrdonnanceHeader />
                   </CardHeader>
-
                   <div className='d-flex justify-content-between align-items-center my-3 '>
                     <div className='font-size-12'>
                       <p className='my-1'>
@@ -274,7 +227,9 @@ export default function OrdonnancePaper({ ordonnanceId }) {
                               F
                             </strong>
                           </p>
-                          {capitalizeWords(` ----> ${item.protocole}`)}
+                          {capitalizeWords(
+                            ` ----> ${item.protocole || '--------------'}`
+                          )}
                         </li>
                       ))}
                     </ul>

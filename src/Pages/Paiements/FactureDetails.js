@@ -3,9 +3,7 @@ import {
   Card,
   CardBody,
   CardHeader,
-  CardImg,
   CardText,
-  CardTitle,
   Col,
   Container,
 } from 'reactstrap';
@@ -17,12 +15,7 @@ import { useOnePaiement } from '../../Api/queriesPaiement';
 import { useParams } from 'react-router-dom';
 import React from 'react';
 import html2pdf from 'html2pdf.js';
-import {
-  hospitalAdresse,
-  hospitalName,
-  hospitalTel,
-  logoMedical,
-} from '../CompanyInfo/CompanyInfo';
+import OrdonnanceHeader from '../Ordonnances/Details/OrdonnanceHeader';
 
 export default function FactureDetails() {
   const { id } = useParams();
@@ -91,11 +84,17 @@ export default function FactureDetails() {
     printWindow.print();
     printWindow.close();
   };
+
+  const ordonnance = selectedPaiement?.ordonnance;
+  const traitement = ordonnance?.traitement;
+  const patient = traitement?.patient;
+  const totalAmount = ordonnance?.totalAmount + traitement?.totalAmount;
+
   return (
     <React.Fragment>
       <div className='page-content'>
         <Container fluid>
-          <Breadcrumbs title='Transactions' breadcrumbItem='Factures' />
+          <Breadcrumbs title='Paiement' breadcrumbItem='Factures' />
 
           <Col className='col-sm-auto'>
             <div className='d-flex gap-4  justify-content-center align-items-center'>
@@ -110,7 +109,7 @@ export default function FactureDetails() {
 
               <Button color='danger' onClick={exportPDFFacture}>
                 <i className='fas fa-paper-plane  me-1 '></i>
-                Exporter en PDF
+                Télécharger en PDF
               </Button>
             </div>
           </Col>
@@ -136,60 +135,30 @@ export default function FactureDetails() {
             >
               <CardBody>
                 <CardHeader>
-                  <CardImg
-                    src={logoMedical}
-                    style={{
-                      width: '70px',
-                      position: 'absolute',
-                      top: '30px',
-                      left: '10px',
-                    }}
-                  />
-                  <CardTitle className='text-center '>
-                    <h3>{hospitalName} </h3>
-                    <p style={{ margin: '15px', fontSize: '10px' }}>
-                      {hospitalAdresse}
-                    </p>
-                    <p style={{ margin: '15px', fontSize: '10px' }}>
-                      {hospitalTel}
-                    </p>
-                  </CardTitle>
-                  <CardText style={{ fontSize: '15px', margin: '35px 0' }}>
-                    <strong> Date:</strong>{' '}
-                    {new Date(selectedPaiement.createdAt).toLocaleDateString()}
-                  </CardText>
-                  <CardImg
-                    src={logoMedical}
-                    style={{
-                      width: '70px',
-                      position: 'absolute',
-                      top: '30px',
-                      right: '10px',
-                    }}
-                  />
+                  <OrdonnanceHeader />
                 </CardHeader>
-                <h4 className='text-center'>Réçu</h4>
+                <h4 className='text-center'>Détail de Reçu</h4>
+                <h6 className='text-center'>
+                  Date de paiement:{' '}
+                  {new Date(selectedPaiement?.paiementDate).toLocaleDateString(
+                    'fr-FR'
+                  )}{' '}
+                </h6>
                 <div className='d-flex justify-content-around align-item-center'>
                   <div className='my-2 '>
                     <h6 style={{ marginBottom: '20px' }}>Patient</h6>
                     <CardText>
                       <strong>Nom et Prénom: </strong>
-                      {capitalizeWords(
-                        selectedPaiement?.traitement?.patient?.firstName
-                      )}{' '}
-                      {capitalizeWords(
-                        selectedPaiement?.traitement?.patient?.lastName
-                      )}
+                      {capitalizeWords(patient?.firstName)}{' '}
+                      {capitalizeWords(patient?.lastName)}
                     </CardText>
                     <CardText>
                       <strong>Sexe: </strong>
-                      {capitalizeWords(
-                        selectedPaiement?.traitement?.patient?.gender
-                      )}
+                      {capitalizeWords(patient?.gender)}
                     </CardText>
                     <CardText>
                       <strong>Age: </strong>
-                      {selectedPaiement?.traitement?.patient?.age}
+                      {patient?.age}
                     </CardText>
                   </div>
                   {/* Bordure Séparateur */}
@@ -207,17 +176,18 @@ export default function FactureDetails() {
                     <h6 style={{ marginBottom: '20px' }}>Traitement</h6>
                     <CardText>
                       <strong> Maladie: </strong>{' '}
-                      {capitalizeWords(selectedPaiement?.traitement?.motif)}
+                      {capitalizeWords(traitement?.motif)}
                     </CardText>
                     <CardText>
                       <strong>Date de Traitement : </strong>
-                      {new Date(
-                        selectedPaiement?.traitement?.createdAt
-                      ).toLocaleDateString('fr-Fr', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: '2-digit',
-                      })}
+                      {new Date(traitement?.traitDate).toLocaleDateString(
+                        'fr-Fr',
+                        {
+                          weekday: 'long',
+                          year: 'numeric',
+                          month: '2-digit',
+                        }
+                      )}
                     </CardText>
                   </div>
                 </div>
@@ -236,7 +206,7 @@ export default function FactureDetails() {
                       Somme Total:{' '}
                       <strong style={{ fontSize: '14px' }}>
                         {' '}
-                        {formatPrice(selectedPaiement?.totalAmount)} F{' '}
+                        {formatPrice(totalAmount)} F{' '}
                       </strong>{' '}
                     </CardText>
                     <CardText className='text-center '>
@@ -247,12 +217,11 @@ export default function FactureDetails() {
                       </strong>{' '}
                     </CardText>
                     <CardText className='text-center '>
-                      Réliqua:
+                      Reliquat:
                       <strong style={{ fontSize: '14px' }}>
                         {' '}
                         {formatPrice(
-                          selectedPaiement?.totalAmount -
-                            selectedPaiement?.totalPaye
+                          totalAmount - selectedPaiement?.totalPaye
                         )}{' '}
                         F{' '}
                       </strong>

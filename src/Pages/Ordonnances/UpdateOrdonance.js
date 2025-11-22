@@ -53,7 +53,6 @@ export default function UpdateOrdonance() {
   // Query pour ajouter une COMMANDE dans la base de données
   const { mutate: updateOrdonnance } = useUpdateOrdonnance();
   const { data: selectedOrdonnance } = useOneOrdonnance(id);
-
   // Fontion pour Rechercher
   const filterSearchMedicaments = medicamentsData?.filter((medica) => {
     const search = searchTerm.toLowerCase();
@@ -67,18 +66,13 @@ export default function UpdateOrdonance() {
 
   // SelectedOrdonnance Items dans le panier
   useEffect(() => {
-    if (
-      selectedOrdonnance?.ordonnances?.items &&
-      selectedOrdonnance?.ordonnances?.items.length > 0
-    ) {
-      const initialItems = selectedOrdonnance?.ordonnances?.items?.map(
-        (item) => ({
-          ordonnance: item.medicaments,
-          quantity: item.quantity,
-          customerPrice: item.customerPrice || item.medicaments.price,
-          protocole: item.protocole,
-        })
-      );
+    if (selectedOrdonnance?.items && selectedOrdonnance?.items.length > 0) {
+      const initialItems = selectedOrdonnance?.items?.map((item) => ({
+        ordonnance: item.medicaments,
+        quantity: item.quantity,
+        customerPrice: item.customerPrice || item.medicaments.price,
+        protocole: item.protocole,
+      }));
       setOrdonnanceItems(initialItems);
     }
   }, [selectedOrdonnance]);
@@ -162,7 +156,7 @@ export default function UpdateOrdonance() {
 
     initialValues: {
       ordonnanceDate: selectedOrdonnance
-        ? selectedOrdonnance?.ordonnances?.ordonnanceDate?.slice(0, 10)
+        ? selectedOrdonnance?.ordonnanceDate?.slice(0, 10)
         : new Date().toISOString().slice(0, 10),
     },
 

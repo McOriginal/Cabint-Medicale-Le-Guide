@@ -65,7 +65,7 @@ export default function PaiementsHistorique() {
   );
 
   // Calculer le Total Payés
-  const sumTatalPayed = filterPaiementHistorique?.reduce(
+  const sumTotalPayed = filterPaiementHistorique?.reduce(
     (acc, item) => (acc += item?.amount),
     0
   );
@@ -73,8 +73,7 @@ export default function PaiementsHistorique() {
   const ordonnanceAmount = ordonnanceData?.totalAmount;
   const traitementAmount = ordonnanceData?.traitement?.totalAmount;
   const totalAmountToPay = ordonnanceAmount + traitementAmount;
-  const reliqua = totalAmountToPay - sumTatalPayed;
-
+  const reliqua = totalAmountToPay - sumTotalPayed;
   return (
     // <React.Fragment>
     <div className='page-content'>
@@ -110,8 +109,8 @@ export default function PaiementsHistorique() {
         <FacturePaiement
           show_modal={facture_modal}
           tog_show_modal={setFacture_modal}
-          selectedPaiementHistoriqueID={selectedPaiement}
-          // reliqua={reliqua}
+          selectedPaiement={selectedPaiement}
+          reliqua={reliqua}
         />
         {/* ---------- Recue de Paiement ---------- */}
         <Row>
@@ -123,7 +122,7 @@ export default function PaiementsHistorique() {
               <CardBody>
                 <div id='paiementsList'>
                   <Row className='g-4 mb-3'>
-                    {totalAmountToPay < sumTatalPayed && (
+                    {sumTotalPayed < totalAmountToPay && (
                       <Col className='col-sm-auto'>
                         <div className='d-flex gap-1'>
                           <Button
@@ -149,7 +148,7 @@ export default function PaiementsHistorique() {
                         <h6>
                           Total Payé:{' '}
                           <span className='text-success'>
-                            {formatPrice(sumTatalPayed)} F
+                            {formatPrice(sumTotalPayed)} F
                           </span>
                         </h6>
                         <h6>
@@ -236,50 +235,48 @@ export default function PaiementsHistorique() {
                                     <div className='d-flex gap-2 justify-content-center alitgn-items-center'>
                                       <div>
                                         <button
+                                          className='btn btn-sm btn-warning show-item-btn'
+                                          onClick={() => {
+                                            setPaiementHistoriqueToUpdate(
+                                              paiement
+                                            );
+                                            setFormTitle(
+                                              'Modifier le Paiement'
+                                            );
+                                            tog_historique_form_modal();
+                                          }}
+                                        >
+                                          <i className='bx bx-pencil align-center text-white'></i>
+                                        </button>
+                                      </div>
+                                      <div>
+                                        <button
                                           className='btn btn-sm btn-secondary show-item-btn'
                                           onClick={() => {
-                                            setSelectedPaiement(paiement?._id);
+                                            setSelectedPaiement(paiement);
                                             tog_facture_modal();
                                           }}
                                         >
                                           <i className='bx bx-show align-center text-white'></i>
                                         </button>
                                       </div>
-                                      <div className='d-flex gap-2'>
-                                        <div>
-                                          <button
-                                            className='btn btn-sm btn-warning show-item-btn'
-                                            onClick={() => {
-                                              setPaiementHistoriqueToUpdate(
-                                                paiement
-                                              );
-                                              setFormTitle(
-                                                'Modifier le Paiement'
-                                              );
-                                              tog_form_modal();
-                                            }}
-                                          >
-                                            <i className='bx bx-pencil align-center text-white'></i>
-                                          </button>
-                                        </div>
 
-                                        <div className='remove'>
-                                          <button
-                                            className='btn btn-sm btn-danger remove-item-btn'
-                                            data-bs-toggle='modal'
-                                            data-bs-target='#deleteRecordModal'
-                                            onClick={() => {
-                                              deleteButton(
-                                                paiement._id,
-                                                `Paiement de ${paiement?.amount} F
+                                      <div className='remove'>
+                                        <button
+                                          className='btn btn-sm btn-danger remove-item-btn'
+                                          data-bs-toggle='modal'
+                                          data-bs-target='#deleteRecordModal'
+                                          onClick={() => {
+                                            deleteButton(
+                                              paiement._id,
+                                              `Paiement de ${paiement?.amount} F
                                                    `,
-                                                deletePaiementHistorique
-                                              );
-                                            }}
-                                          >
-                                            <i className='ri-delete-bin-fill text-white'></i>
-                                          </button>
-                                        </div>
+                                              deletePaiementHistorique
+                                            );
+                                          }}
+                                        >
+                                          <i className='ri-delete-bin-fill text-white'></i>
+                                        </button>
                                       </div>
                                     </div>
                                   </td>

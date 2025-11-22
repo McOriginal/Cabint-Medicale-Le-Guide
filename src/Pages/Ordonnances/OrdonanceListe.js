@@ -8,14 +8,15 @@ import {
   useDeleteOrdonnance,
 } from '../../Api/queriesOrdonnance';
 import React, { useState } from 'react';
-import OrdonnanceDetails from './OrdonnanceDetails';
 import Swal from 'sweetalert2';
 import { connectedUserRole } from '../Authentication/userInfos';
+import { useAllPaiements } from '../../Api/queriesPaiement';
 
 export default function OrdonnanceListe() {
   const navigate = useNavigate();
   // Afficher toutes les ordonnances
   const { data: ordonnances, isLoading, error } = useAllOrdonnances();
+  const { data: paiements } = useAllPaiements();
 
   // Annuler une Ordonnance en suite la supprimer
   const { mutate: deleteAndDecrementMultipleStocks, isLoading: isDeletting } =
@@ -192,6 +193,7 @@ export default function OrdonnanceListe() {
                           >
                             <thead className='table-light'>
                               <tr className='text-center'>
+                                <th></th>
                                 <th scope='col' style={{ width: '50px' }}>
                                   Date d'ordonnance
                                 </th>
@@ -221,103 +223,122 @@ export default function OrdonnanceListe() {
                             </thead>
                             <tbody className='list form-check-all text-center'>
                               {filterSearchOrdonnanceData?.length > 0 &&
-                                filterSearchOrdonnanceData?.map((ordo) => (
-                                  <tr key={ordo?._id} className='text-center'>
-                                    <th>
-                                      {new Date(
-                                        ordo?.ordonnanceDate
-                                      ).toLocaleDateString('fr-Fr', {
-                                        weekday: 'short',
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                      })}
-                                    </th>
-                                    <td>
-                                      {capitalizeWords(
-                                        ordo?.traitement?.patient?.firstName
-                                      )}{' '}
-                                      {capitalizeWords(
-                                        ordo?.traitement?.patient?.lastName
-                                      )}
-                                    </td>
-                                    <td
-                                      className='text-wrap'
-                                      style={{ maxWidth: '200px' }}
-                                    >
-                                      {ordo?.traitement
-                                        ? capitalizeWords(
-                                            ordo?.traitement?.motif
-                                          )
-                                        : '-----'}
-                                    </td>
+                                filterSearchOrdonnanceData?.map((ordo) => {
+                                  const traitement = ordo?.traitement;
+                                  const patient = traitement?.patient;
+                                  const amount =
+                                    ordo?.totalAmount + traitement?.totalAmount;
+                                  return (
+                                    <tr key={ordo?._id} className='text-center'>
+                                      <td>
+                                        {paiements?.some(
+                                          (paiement) =>
+                                            paiement?.ordonnance?._id ===
+                                              ordo?._id &&
+                                            paiement?.totalPaye === amount
+                                        ) ? (
+                                          <i
+                                            className='
+                                            fas fa-check-circle
+                                           text-success'
+                                          ></i>
+                                        ) : (
+                                          <i
+                                            className='
+                                            fas fa-times-circle
+                                           text-danger'
+                                          ></i>
+                                        )}
+                                      </td>
+                                      <th>
+                                        {new Date(
+                                          ordo?.ordonnanceDate
+                                        ).toLocaleDateString('fr-Fr', {
+                                          weekday: 'short',
+                                          year: 'numeric',
+                                          month: '2-digit',
+                                          day: '2-digit',
+                                        })}
+                                      </th>
+                                      <td>
+                                        {capitalizeWords(patient?.firstName)}{' '}
+                                        {capitalizeWords(patient?.lastName)}
+                                      </td>
+                                      <td
+                                        className='text-wrap'
+                                        style={{ maxWidth: '200px' }}
+                                      >
+                                        {traitement
+                                          ? capitalizeWords(traitement?.motif)
+                                          : '-----'}
+                                      </td>
 
-                                    <td>
-                                      {new Date(
-                                        ordo?.createdAt
-                                      ).toLocaleDateString('fr-Fr', {
-                                        weekday: 'short',
-                                        year: 'numeric',
-                                        month: '2-digit',
-                                        day: '2-digit',
-                                      })}{' '}
-                                    </td>
+                                      <td>
+                                        {new Date(
+                                          ordo?.ordonnanceDate ||
+                                            ordo?.createdAt
+                                        ).toLocaleDateString('fr-Fr', {
+                                          weekday: 'short',
+                                          year: 'numeric',
+                                          month: '2-digit',
+                                          day: '2-digit',
+                                        })}{' '}
+                                      </td>
 
-                                    <td>
-                                      {ordo?.items?.length} médicaments
-                                      {'  '}
-                                    </td>
+                                      <td>
+                                        {ordo?.items?.length} médicaments
+                                        {'  '}
+                                      </td>
 
-                                    <td>
-                                      {isDeletting && <LoadingSpiner />}
-                                      {!isDeletting && (
-                                        <div className='d-flex gap-2'>
-                                          {connectedUserRole === 'admin' && (
-                                            <div>
+                                      <td>
+                                        {isDeletting && <LoadingSpiner />}
+                                        {!isDeletting && (
+                                          <div className='d-flex gap-2'>
+                                            {connectedUserRole === 'admin' && (
+                                              <div>
+                                                <button
+                                                  className='btn btn-sm btn-secondary '
+                                                  onClick={() =>
+                                                    navigate(
+                                                      `/traitements/updateOrdonnance/${ordo?._id}`
+                                                    )
+                                                  }
+                                                >
+                                                  <i className=' bx bx-edit-alt text-white'></i>
+                                                </button>
+                                              </div>
+                                            )}
+                                            <div className='show-details'>
                                               <button
-                                                className='btn btn-sm btn-secondary '
-                                                onClick={() =>
+                                                className='btn btn-sm btn-info '
+                                                onClick={() => {
                                                   navigate(
-                                                    `/traitements/updateOrdonnance/${ordo?._id}`
-                                                  )
-                                                }
+                                                    `/ordonnance/details/${ordo?._id}`
+                                                  );
+                                                }}
                                               >
-                                                <i className=' bx bx-edit-alt text-white'></i>
+                                                <i className=' bx bx-show-alt text-white'></i>
                                               </button>
                                             </div>
-                                          )}
-                                          <div className='show-details'>
-                                            <button
-                                              className='btn btn-sm btn-info '
-                                              data-bs-toggle='modal'
-                                              data-bs-target='#showdetails'
-                                              onClick={() => {
-                                                navigate(
-                                                  `/ordonnance/details/${ordo?._id}`
-                                                );
-                                              }}
-                                            >
-                                              <i className=' bx bx-show-alt text-white'></i>
-                                            </button>
-                                          </div>
 
-                                          {connectedUserRole === 'admin' && (
-                                            <div>
-                                              <button
-                                                className='btn btn-sm btn-danger '
-                                                onClick={() =>
-                                                  onCancelOrdonnance(ordo)
-                                                }
-                                              >
-                                                <i className='fas fa-trash'></i>
-                                              </button>
-                                            </div>
-                                          )}
-                                        </div>
-                                      )}
-                                    </td>
-                                  </tr>
-                                ))}
+                                            {connectedUserRole === 'admin' && (
+                                              <div>
+                                                <button
+                                                  className='btn btn-sm btn-danger '
+                                                  onClick={() =>
+                                                    onCancelOrdonnance(ordo)
+                                                  }
+                                                >
+                                                  <i className='fas fa-trash'></i>
+                                                </button>
+                                              </div>
+                                            )}
+                                          </div>
+                                        )}
+                                      </td>
+                                    </tr>
+                                  );
+                                })}
                             </tbody>
                           </table>
                         )}

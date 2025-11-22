@@ -70,6 +70,8 @@ export default function PaiementsListe() {
     return acc + sum;
   }, 0);
 
+  // const f = paiementsData?.filter((item) => !item.ordonnance);
+  // console.log(f);
   return (
     <React.Fragment>
       <div className='page-content'>
@@ -193,7 +195,7 @@ export default function PaiementsListe() {
                                   Somme Payé
                                 </th>
                                 <th className='sort' data-sort='reliqua'>
-                                  Réliqua
+                                  Reliquat
                                 </th>
 
                                 <th data-sort='action'>Action</th>
@@ -203,10 +205,12 @@ export default function PaiementsListe() {
                             <tbody className='list form-check-all text-center'>
                               {filterSearchPaiement?.length > 0 &&
                                 filterSearchPaiement?.map((paiement, index) => {
+                                  const ordonnance = paiement?.ordonnance;
+                                  const traitement = ordonnance?.traitement;
+                                  const patient = traitement?.patient;
                                   const totalAmount =
-                                    paiement?.ordonnance?.traitement
-                                      ?.totalAmount +
-                                    paiement?.ordonnance?.totalAmount;
+                                    ordonnance?.totalAmount +
+                                    traitement?.totalAmount;
                                   return (
                                     <tr
                                       key={paiement?._id}
@@ -224,34 +228,16 @@ export default function PaiementsListe() {
                                         style={{ display: 'none' }}
                                       ></td>
                                       <td>
-                                        {capitalizeWords(
-                                          paiement?.ordonnance?.traitement
-                                            ?.patient?.firstName
-                                        )}{' '}
-                                        {capitalizeWords(
-                                          paiement?.ordonnance?.traitement
-                                            ?.patient?.lastName
-                                        )}
+                                        {capitalizeWords(patient?.firstName)}{' '}
+                                        {capitalizeWords(patient?.lastName)}
                                       </td>
                                       <td>
-                                        {capitalizeWords(
-                                          paiement?.ordonnance?.traitement
-                                            ?.patient?.gender
-                                        )}{' '}
+                                        {capitalizeWords(patient?.gender)}{' '}
                                       </td>
-                                      <td>
-                                        {paiement?.ordonnance?.traitement
-                                          ?.patient?.age
-                                          ? paiement?.ordonnance?.traitement
-                                              ?.patient?.age
-                                          : '----'}
-                                      </td>
+                                      <td>{patient?.age || '----'}</td>
 
                                       <td className='text-wrap'>
-                                        {capitalizeWords(
-                                          paiement?.ordonnance?.traitement
-                                            ?.motif
-                                        )}
+                                        {capitalizeWords(traitement?.motif)}
                                       </td>
 
                                       <td>

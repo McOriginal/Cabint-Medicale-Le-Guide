@@ -163,7 +163,9 @@ export default function PatientsListe() {
                                   </td>
                                   <td>{capitalizeWords(patient?.lastName)} </td>
                                   <td className='badge bg-warning text-light'>
-                                    {capitalizeWords(patient?.groupeSanguin)}{' '}
+                                    {capitalizeWords(
+                                      patient?.groupeSanguin || 'non définis'
+                                    )}{' '}
                                   </td>
 
                                   <td>

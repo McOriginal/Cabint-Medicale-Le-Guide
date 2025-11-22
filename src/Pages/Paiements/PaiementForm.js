@@ -44,8 +44,7 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
     enableReinitialize: true,
 
     initialValues: {
-      ordonnance:
-        paiementToEdit?.ordonnance?._id || ordonnanceData?.ordonnances?._id,
+      ordonnance: paiementToEdit?.ordonnance?._id || ordonnanceData?._id,
       paiementDate:
         paiementToEdit?.paiementDate.substring(0, 10) ||
         new Date().toISOString().substring(0, 10),
@@ -155,23 +154,23 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
       }}
     >
       <h6 className='text-end '>
-        Traitement / Consultation:{' '}
+        Traitement:{' '}
         <span className='text-info'>
-          {formatPrice(ordonnanceData?.traitements?.totalAmount || 0)} F
+          {formatPrice(ordonnanceData?.traitement?.totalAmount || 0)} F
         </span>
       </h6>
       <h6 className='text-end '>
         Ordonnance:{' '}
         <span className='text-info'>
-          {formatPrice(ordonnanceData?.ordonnances?.totalAmount)} F
+          {formatPrice(ordonnanceData?.totalAmount)} F
         </span>
       </h6>
       <h6 className='text-end '>
         Total:{' '}
         <span className='text-success'>
           {formatPrice(
-            ordonnanceData?.traitements?.totalAmount +
-              ordonnanceData?.ordonnances?.totalAmount
+            ordonnanceData?.traitement?.totalAmount +
+              ordonnanceData?.totalAmount
           )}{' '}
           F
         </span>
@@ -187,8 +186,8 @@ const PaiementForm = ({ paiementToEdit, tog_form_modal }) => {
               type='number'
               min={0}
               max={
-                ordonnanceData?.traitements?.totalAmount +
-                  ordonnanceData?.ordonnances?.totalAmount || 0
+                ordonnanceData?.traitement?.totalAmount +
+                  ordonnanceData?.totalAmount || 0
               }
               placeholder='Somme Payé'
               className='form-control no-spinner'

@@ -47,24 +47,9 @@ const SidebarData = [
 
   {
     label: 'Ordonnances Externe',
-    icon: 'fas fa-first-aid',
+    icon: 'mdi mdi-hospital-box-outline',
     isHasArrow: true,
     url: '/externe-ordonnance/liste',
-  },
-
-  // Transactions
-  {
-    label: 'Paiements',
-    isMainMenu: true,
-  },
-  {
-    label: 'Comptablité',
-    icon: 'fas fa-euro-sign',
-    subItem: [
-      { sublabel: 'Historique des Paiements', link: '/paiements' },
-      // { sublabel: 'Historique des Paiements', link: '/factures' },
-      { sublabel: 'Dépense', link: '/depenses' },
-    ],
   },
 
   // Pharmacie
@@ -76,9 +61,27 @@ const SidebarData = [
     label: 'Pharmacie',
     icon: 'dripicons-pill',
     subItem: [
-      { sublabel: 'Liste Médicament', link: '/medicaments' },
+      { sublabel: 'Médicaments', link: '/medicaments' },
       { sublabel: 'Stock Faible', link: '/medicaments_no_stock' },
-      { sublabel: 'Historique Approvisionnements', link: '/approvisonnements' },
+      {
+        sublabel: "Historique d'Approvisionnements",
+        link: '/approvisonnements',
+      },
+    ],
+  },
+
+  // Transactions
+  {
+    label: 'Paiements',
+    isMainMenu: true,
+  },
+  {
+    label: 'Comptablité',
+    icon: 'fas fa-dollar-sign',
+    subItem: [
+      { sublabel: 'Paiements', link: '/paiements' },
+      // { sublabel: 'Historique des Paiements', link: '/factures' },
+      { sublabel: 'Dépense', link: '/depenses' },
     ],
   },
 

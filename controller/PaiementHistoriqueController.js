@@ -5,7 +5,7 @@ const Ordonnance = require('../models/OrdonanceModel');
 const Paiement = require('../models/PaiementModel');
 // Enregistrer un paiement
 exports.createPaiementHistorique = async (req, res) => {
-  const session= await mongoose.startSession();
+  const session = await mongoose.startSession();
   session.startTransaction();
 
   const { amount } = req.body;
@@ -25,25 +25,30 @@ exports.createPaiementHistorique = async (req, res) => {
         .json({ message: "Vous devez d'abord ajouter le premier paiement" });
     }
 
-    await Paiement.findByIdAndUpdate(existingPaiement, {
-      $inc: { totalPaye: +amount }},
-      {session},
+    await Paiement.findByIdAndUpdate(
+      existingPaiement,
+      {
+        $inc: { totalPaye: +amount },
+      },
+      { session }
     );
 
     const paiementHistorique = await PaiementHistorique.create(
-      [{
-      ...req.body,
-      user: req.user.id,
-    }],
-     {session}
-  );
+      [
+        {
+          ...req.body,
+          user: req.user.id,
+        },
+      ],
+      { session }
+    );
 
-  await session.commitTransaction();
-  session.endSession()
+    await session.commitTransaction();
+    session.endSession();
     return res.status(201).json(paiementHistorique);
   } catch (err) {
-    await session.abortTransaction()
-    session.endSession()
+    await session.abortTransaction();
+    session.endSession();
     console.log(err);
     res.status(400).json({ status: 'error', message: err.message });
   }
@@ -52,7 +57,7 @@ exports.createPaiementHistorique = async (req, res) => {
 // Mettre à jour un paiement
 exports.updatePaiementHistorique = async (req, res) => {
   const session = await mongoose.startSession();
-  session.startTransaction()
+  session.startTransaction();
   try {
     const newAmount = req.body.amount;
     const selectedOrdonnanceId = req.body.ordonnance;
@@ -60,17 +65,16 @@ exports.updatePaiementHistorique = async (req, res) => {
     // Etape 1: chercher si ID de Paiement sélectionné
     const existingPaiement = await Paiement.findOne({
       ordonnance: selectedOrdonnanceId,
-    }).session(startSession);
+    }).session(session);
 
     // On vérifie si le paiement n'existe pas
     if (!existingPaiement) {
-      await session.abortTransaction()
-      session.endSession()
+      await session.abortTransaction();
+      session.endSession();
       return res
         .status(404)
         .json({ message: "Vous devez d'abord ajouter le premier paiement" });
     }
-
 
     const selectedPaiementHistorique = await PaiementHistorique.findById(
       req.params.id
@@ -78,14 +82,22 @@ exports.updatePaiementHistorique = async (req, res) => {
 
     const oldAmount = selectedPaiementHistorique.amount;
     // Soustraire  d'abord le montant de l'ancien paiement
-    await Paiement.findByIdAndUpdate(existingPaiement, {
-      $inc: { totalPaye: -oldAmount },
-    },{session});
+    await Paiement.findByIdAndUpdate(
+      existingPaiement,
+      {
+        $inc: { totalPaye: -oldAmount },
+      },
+      { session }
+    );
 
     // en suite adintioner la nouvealle valeur
-    await Paiement.findByIdAndUpdate(existingPaiement, {
-      $inc: { totalPaye: +newAmount },
-    },{session});
+    await Paiement.findByIdAndUpdate(
+      existingPaiement,
+      {
+        $inc: { totalPaye: +newAmount },
+      },
+      { session }
+    );
 
     const updated = await PaiementHistorique.findByIdAndUpdate(
       req.params.id,
@@ -93,16 +105,16 @@ exports.updatePaiementHistorique = async (req, res) => {
       {
         new: true,
         runValidators: true,
-        session
+        session,
       }
     );
 
-await session.commitTransaction()
-session.endSession()
+    await session.commitTransaction();
+    session.endSession();
 
     return res.status(200).json(updated);
   } catch (err) {
-    await session.abortTransaction()
+    await session.abortTransaction();
     session.endSession();
     console.log(err);
     res.status(400).json({ status: 'error', message: err.message });
@@ -142,77 +154,70 @@ exports.getPaiementHistorique = async (req, res) => {
 
 // Supprimer un paiement
 exports.deletePaiementHistorique = async (req, res) => {
-  const session = await mongoose.startSession()
-  session.startTransaction()
+  const session = await mongoose.startSession();
+  session.startTransaction();
   try {
     // On Cherche d'abord l'HISTORIQUE de PAIEMENT a supprimer
-    const deletedHisPaiement = await PaiementHistorique.findById(req.params.id).session(session);
+    const deletedHisPaiement = await PaiementHistorique.findById(
+      req.params.id
+    ).session(session);
 
-    const paieHistorique = await PaiementHistorique.find({ordonnance: deletedHisPaiement.ordonnance}).session(session);
-  
+    const paieHistorique = await PaiementHistorique.find({
+      ordonnance: deletedHisPaiement.ordonnance,
+    }).session(session);
 
-   // Trouver le PAIEMENT dont ID de COMMANDE est dans l'historique de PAIEMENT
-   const paiement = await Paiement.findOne({
-    ordonnance: deletedHisPaiement.ordonnance,
-  }).session(session);
+    // Trouver le PAIEMENT dont ID de COMMANDE est dans l'historique de PAIEMENT
+    const paiement = await Paiement.findOne({
+      ordonnance: deletedHisPaiement.ordonnance,
+    }).session(session);
 
-  
-
-
-if(!deletedHisPaiement || !paieHistorique || !paiement){
-  await session.abortTransaction()
-  session.endSession()
-  return res.status(404).json({message: 'Aucun Paiement  Trouvée'});
-}
-  
+    if (!deletedHisPaiement || !paieHistorique || !paiement) {
+      await session.abortTransaction();
+      session.endSession();
+      return res.status(404).json({ message: 'Aucun Paiement  Trouvée' });
+    }
 
     // Vérifier si il ne reste qu'un seul Paiement Historique alors On supprime aussi le Paiement
-if(paieHistorique.length === 1 ){
-  
+    if (paieHistorique.length === 1) {
+      await Paiement.findByIdAndDelete(paiement._id).session(session);
 
- await Paiement.findByIdAndDelete(paiement._id).session(session);
-   
-    // après on supprimer le PAIEMENT HISTORIQUE
-     await PaiementHistorique.findByIdAndDelete(req.params.id).session(session);
+      // après on supprimer le PAIEMENT HISTORIQUE
+      await PaiementHistorique.findByIdAndDelete(req.params.id).session(
+        session
+      );
 
-     await session.commitTransaction()
-     session.endSession()
+      await session.commitTransaction();
+      session.endSession();
 
- return res.status(200).json({
-    status: 'success',
-    message: 'Paiement et son Historique ont été supprimé avec succès',
-  })
-}
-  
+      return res.status(200).json({
+        status: 'success',
+        message: 'Paiement et son Historique ont été supprimé avec succès',
+      });
+    }
 
     // On met à jour la somme de TotalPaye de PAIEMENT correspondant
-   await Paiement.findByIdAndUpdate(
+    await Paiement.findByIdAndUpdate(
       paiement._id,
       {
         $inc: { totalPaye: -deletedHisPaiement.amount },
       },
-      {session}
+      { session }
     );
 
+    // après on supprimer le PAIEMENT HISTORIQUE
+    await PaiementHistorique.findByIdAndDelete(req.params.id).session(session);
 
- // après on supprimer le PAIEMENT HISTORIQUE
- await PaiementHistorique.findByIdAndDelete(req.params.id).session(session);
+    await session.commitTransaction();
+    session.endSession();
 
-   
-    await session.commitTransaction()
-    session.endSession()
-
-    return  res.status(200).json({
-    
+    return res.status(200).json({
       status: 'success',
       message: 'Historique Paiement supprimé avec succès',
     });
-   
-   
   } catch (err) {
-    await session.abortTransaction()
+    await session.abortTransaction();
     session.endSession();
-    console.log(err)
+    console.log(err);
     res.status(400).json({ status: 'error', message: err.message });
   }
 };

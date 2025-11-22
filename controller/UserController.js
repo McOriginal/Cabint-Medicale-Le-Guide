@@ -132,7 +132,7 @@ exports.sendVerifyCodePassword = async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"Clinique Médicale Keneya" <${process.env.EMAIL_USER}>`,
+      from: `"Clinique Médicale Le Guide" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Code de réinitialisation',
       text: `Votre code de réinitialisation est : ${code}. Il expire dans 2 minutes.`,

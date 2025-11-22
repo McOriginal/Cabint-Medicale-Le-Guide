@@ -201,22 +201,16 @@ exports.getOneOrdonnance = async (req, res) => {
 // Récuperer l'ordonnance par Traitement
 exports.getTraitementOrdonnance = async (req, res) => {
   try {
-    // ID de Traitement
-    const traitementId = req.params.traitementId;
-
-    // Récupérer les patients à travers le traitement
-    const trait = await Traitement.findById(traitementId)
-      .populate('patient')
-      .populate('doctor');
+   
 
     // Récupérer l'ordonnance dont le traitement correspond à une ID précise
-    const ordonnance = await Ordonnance.find({
-      traitement: traitementId,
+    const ordonnance = await Ordonnance.findOne({
+      traitement: req.params.id,
     })
       .populate('traitement')
       .populate('items.medicaments');
 
-    return res.status(201).json({ ordonnances: { ordonnance, trait } });
+    return res.status(201).json(ordonnance);
   } catch (e) {
     return res.status(404).json(e);
   }

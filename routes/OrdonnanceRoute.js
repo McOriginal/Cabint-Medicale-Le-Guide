@@ -22,7 +22,7 @@ router.get('/getOrdonnance/:id', ordonnanceController.getOneOrdonnance);
 
 //  Obtenir une Ordonnances (avec TRAITEMENT liée)
 router.get(
-  '/getTraitementOrdonnance/:traitementId',
+  '/getTraitementOrdonnance/:id',
   ordonnanceController.getTraitementOrdonnance
 );
 

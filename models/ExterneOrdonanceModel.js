@@ -5,19 +5,23 @@ const externeOrdonanceSchema = new mongoose.Schema(
     traitement: {
       type:String,
       required: true,
+      trim: true,
     },
     ordonnanceDate:{
       type: Date,
       require: true,
       default: new Date(),
+      trim: true,
     },
     patient: {
       type: String,
       required: true,
+      trim: true,
     },
     doctor: {
       type: String,
       required: true,
+      trim: true,
     },
 
     items: [
@@ -25,6 +29,7 @@ const externeOrdonanceSchema = new mongoose.Schema(
         medicament: {
           type: String,
           required: true,
+          trim: true,
         },
         protocole: {
           type: String,
@@ -51,6 +56,6 @@ const externeOrdonanceSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-const ExterneOrdonance = mongoose.model('ExterneOrdonance', externeOrdonanceSchema);
+const ExterneOrdonance = mongoose.model('ExterneOrdonnance', externeOrdonanceSchema);
 
 module.exports = ExterneOrdonance;

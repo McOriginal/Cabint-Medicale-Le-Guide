@@ -24,14 +24,7 @@ const app = express();
 
 // Middlewares globaux
 // Autoriser les requêtes cross-origin
-// app.use(cors());
-app.use(
-  cors({
-    origin: 'https://quincaillerie-groupe-siby.onrender.com',
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-  })
-);
+app.use(cors());
 app.use(express.json()); // Parser les requêtes avec JSON
 
 // Lire les données de formulaire avec body parser
